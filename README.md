@@ -6,6 +6,7 @@ My CMEE Coursework Repository
     Languages: 
         plain text
         shell script
+        Python
 
     Dependencies: 
         What special packages (which are not part of standard libraries of the language(s) used) might be needed for a new user to run your project
