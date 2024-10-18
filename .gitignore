@@ -1,3 +1,8 @@
 *~ 
 *.tmp
 */sandbox/
+*.exe
+*.o
+*.class
+*~
+.*.swp
