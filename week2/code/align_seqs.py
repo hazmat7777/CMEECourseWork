@@ -1,37 +1,43 @@
+#!/usr/bin/env python3
+
+"""Aligns two sequences read from a csv file."""
+
 ## imports
 import ipdb
 import csv
 
-# Two example sequences to match
-#seq2 = "ATCGCCGGATTACGGG"
-#seq1 = "CAATTCGGAT"
+## functions
 
-with open('../sandbox/seqs_to_align2.csv', 'r') as file:
-    reader = csv.reader(file)               #read the csv as a nested list
-    seqs = [item for row in reader for item in row]    #uses a list comprehension (?) to create a vector from those rows
+def read_sequences(input_path):
+    """Reads csv FASTA files."""
+    if not input_path.endswith('.csv'):
+        raise ValueError("The input file must be a CSV file.")
+    try:
+        with open(input_path, 'r') as file:
+            reader = csv.reader(file)
+            seqs = [item for row in reader for item in row]
+            if len(seqs) < 2:
+                raise ValueError("The input CSV must contain at least two sequences.")
+            return seqs
+    except FileNotFoundError:
+        print(f"Error: The file {input_path} was not found.")
+        exit(1)
 
-seq1 = seqs[0]
-seq2 = seqs[1]
-seq1
-seq2
+def make_s1_longest(seq1, seq2):
+    """Assigns the longer sequence s1, and the shorter to s2"""
+    l1 = len(seq1)
+    l2 = len(seq2)
+    if l1 >= l2:
+        s1 = seq1
+        s2 = seq2
+    else:
+        s1 = seq2
+        s2 = seq1
+        l1, l2 = l2, l1 # swap the two lengths
+    return s1, s2
 
-# Assign the longer sequence s1, and the shorter to s2
-# l1 is length of the longest, l2 that of the shortest
-
-l1 = len(seq1)
-l2 = len(seq2)
-if l1 >= l2:
-    s1 = seq1
-    s2 = seq2
-else:
-    s1 = seq2
-    s2 = seq1
-    l1, l2 = l2, l1 # swap the two lengths
-
-# A function that computes a score by returning the number of matches starting
-# from arbitrary startpoint (chosen by user)
 def calculate_score(s1, s2, l1, l2, startpoint):
-    global matched
+    """Calculates the number of shared bases between two sequences."""
     matched = "" # to hold string displaying alignements
     score = 0
     for i in range(l2):
@@ -41,42 +47,34 @@ def calculate_score(s1, s2, l1, l2, startpoint):
                 score = score + 1
             else:
                 matched = matched + "-"
+    return matched, score
 
-    # some formatted output
-    print("." * startpoint + matched) # first prints 'startpoint' many dots           
-    print("." * startpoint + s2)
-    print(s1)
-    print(score) 
-    print(" ")
+def find_best_alignment(s1, s2, l1, l2):
+    """Finds the best alignment and score between two sequences."""
+    my_best_align = None
+    my_best_score = -1
+    my_best_matched = ""
+    for i in range(l1):  # Trying all startpoints
+        matched, score = calculate_score(s1, s2, l1, l2, i)  # Call your modified calculate_score
+        if score > my_best_score:
+            my_best_matched = "." * i + matched  # Store the matched string
+            my_best_align = "." * i + s2  # Adding 'i' many dots to align the sequences
+            my_best_score = score
+    return my_best_align, my_best_score
 
-    return score
-
-
-# Test the function with some example starting points:
-#calculate_score(s1, s2, l1, l2, 0)
-#calculate_score(s1, s2, l1, l2, 1)
-#calculate_score(s1, s2, l1, l2, 5)
-
-# now try to find the best match (highest score) for the two sequences
-my_best_align = None
-my_best_score = -1
-
-for i in range(l1): #trying all startpoints
-    z = calculate_score(s1, s2, l1, l2, i) 
-    if z > my_best_score:
-        #global my_best_matched #dont need this, as not in a function
-        my_best_matched = "." * i + matched
-        my_best_align = "." * i + s2 # adding 'i' many dots to align the seqs
-        my_best_score = z 
-
-print(my_best_align) # Note that you just take the last alignment with the highest score
-print(s1)
-print("Best score:", my_best_score)
-
-
-with open('../results/best_alignment2.txt', 'w') as f:
-    f.write(my_best_matched + '\n')
-    f.write(my_best_align + '\n') # Note that you just take the last alignment with the highest score
-    f.write(s1 + '\n')
-    f.write(f"Best score: {my_best_score}\n")
-
+def main(input_path= "../sandbox/seqs_to_align.csv", output_file = "../results/best_alignment.txt"):
+    """Reads sequences from a csv, finds the best alignment, and writes the result to a text file."""
+    seqs = read_sequences(input_path)
+    seq1 = seqs[0]
+    seq2 = seqs[1]
+    s1, s2 = make_s1_longest(seq1, seq2)
+    l1 = len(s1)
+    l2 = len(s2)
+    my_best_align, my_best_score = find_best_alignment(s1, s2, l1, l2)
+    with open(output_file, 'w') as f:
+        f.write(my_best_align + '\n') # Note that you just take the last alignment with the highest score
+        f.write(s1 + '\n')
+        f.write(f"Best score: {my_best_score}\n")
+    
+if __name__ == "__main__":
+    main()
