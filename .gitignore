@@ -1,8 +1,10 @@
 *~ 
 *.tmp
-*/sandbox/
+**/sandbox/
+**results/*
 *.exe
 *.o
 *.class
 *~
 .*.swp
+__pycache__/
