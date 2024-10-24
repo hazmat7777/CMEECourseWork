@@ -2,6 +2,7 @@
 *.tmp
 **/sandbox/
 **results/*
+!**/results/.gitkeep
 *.exe
 *.o
 *.class
