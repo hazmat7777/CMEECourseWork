@@ -5,14 +5,13 @@ My CMEE Coursework Repository
 
     Languages: 
         plain text
-        shell script
         R
 
     Dependencies: 
-        None
+        tidyverse
 
     Installation: 
-        N/A
+        
 
     Project structure and Usage: 
         Code
