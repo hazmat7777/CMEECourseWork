@@ -1,3 +1,5 @@
+"""For loop and list comprehension to populate a dictionary from a list of tuples."""
+
 taxa = [ ('Myotis lucifugus','Chiroptera'),
          ('Gerbillus henleyi','Rodentia',),
          ('Peromyscus crinitus', 'Rodentia'),

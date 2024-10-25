@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Simple script to demonstrate the use of the __name__ special variable."""
+
 # Filename: using)name.py
 
 if __name__ == '__main__':

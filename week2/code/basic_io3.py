@@ -1,3 +1,5 @@
+"""Script demonstrating how to save objects for later use."""
+
 #############################
 # STORING OBJECTS
 #############################

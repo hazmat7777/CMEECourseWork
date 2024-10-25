@@ -1,9 +1,9 @@
 #!/usr/bin/env ipython3
 
-"""Missing oaks problem"""
+"""Script to identify oaks from a csv file and output them to a separate file."""
 
 __appname__ = 'oaks_debugme.py'
-__author__ = 'dashing_dingos(4)'  
+__author__ = 'dashing_dingos(4)'
 
 
 ### Imports ###
@@ -29,38 +29,28 @@ def is_an_oak(name):
     False
     """
     # Check if the first word matches 'quercus'
-    if len(name.split()[0]) == len("quercus"): 
-        return name.lower().startswith("quercus")
-    return False
+    return name.lower() == "quercus"
     
     
 def main(argv): 
     """ Main entry point of the program"""
-    f = open('../data/TestOaksData.csv','r')  # Open input file
-    g = open('../results/JustOaksData.csv','w')  # Open output file
-    
-    taxa = csv.reader(f)  # Read input CSV
-    csvwrite = csv.writer(g)  # Prepare to write output CSV
-    
-    for row in taxa:
-        if 'Genus' in row[0]:  # Check for header row
-            csvwrite.writerow([row[0], row[1]])  # Write header
-            continue
-        
-        print(row)  # Debugging output
-        print("The genus is: ") 
-        print(row[0] + '\n')  # Print genus name
-        
-        if is_an_oak(row[0]):  # Check for oak genus
-            print('FOUND AN OAK!\n')  # Found an oak
-            csvwrite.writerow([row[0], row[1]])  # Write to output
+    with open('../data/TestOaksData.csv','r') as f, open('../data/JustOaksData.csv','w') as g:
+        taxa = csv.reader(f)
+        csvwrite = csv.writer(g)
+        csvwrite.writerow(['Genus', ' Species'])
+        next(taxa) # skip the header row
+        for row in taxa:
+            print(row)
+            print ("The genus is: ") 
+            print(row[0] + '\n')
+            if is_an_oak(row[0]):
+                print('FOUND AN OAK!\n')
+                csvwrite.writerow([row[0], row[1]])
+            else:
+                print('Not an oak.\n')    
 
-    return 0  # Return status code
+    return 0
 
-
-if (__name__ == "__main__"):
-    """Ensure main function runs when called from command line"""
+if (__name__ == "__main__"): #Ensures main function runs when called from command line
     status = main(sys.argv)  # Run main function with arguments
-    
-
-doctest.testmod()  # Run embedded tests
+    doctest.testmod()  # Run embedded tests

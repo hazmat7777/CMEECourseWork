@@ -1,6 +1,8 @@
 ##############################
 # FILE INPUT
 ##############################
+"""Script on how to read and input data from external files."""
+
 
 # Open a file for reading
 f = open('../sandbox/test.txt', 'r') #r means open in read mode

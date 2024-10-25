@@ -1,3 +1,5 @@
+"""Iterating through lists using for loops and list comprehensions."""
+
 taxa = ['Quercus robur',
         'Fraximus excelsior',
         'Pinus sylvestris' ,
@@ -6,7 +8,7 @@ taxa = ['Quercus robur',
         ]
 
 def is_an_oak(name):
-
+    """Identifies oaks"""
     return name.lower().startswith('quercus ')
 
 

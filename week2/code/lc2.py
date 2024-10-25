@@ -1,3 +1,4 @@
+"""Using for loops and list comprehensions to extract data from a tuple of tuples."""
 # Average UK Rainfall (mm) for 1910 by month
 # http://www.metoffice.gov.uk/climate/uk/datasets
 rainfall = (('JAN',111.4),

@@ -1,22 +1,22 @@
-My CMEE Coursework Repository
+# My CMEE Coursework Repository
 
-    Brief description: 
-        weekly coursework for CMEE MSc 2024-5
+## Brief Description
+Weekly coursework for CMEE MSc 2024-5.
 
-    Languages: 
-        plain text
-        shell script
-        Python
+## Languages
+- Plain Text
+- Shell Script
+- Python
+- R
 
-    Dependencies: 
-        What special packages (which are not part of standard libraries of the language(s) used) might be needed for a new user to run your project
+## Dependencies and Installation
+See the weekly README files for dependencies and guidelines for their installation.
 
-    Installation: 
-        Guidelines for installing the project (if applicable), including dependencies.
+## Project Structural Overview
+- **Week 1:** Shell Scripting
+- **Week 2:** Python
+- **Week 3:** R
 
-    Project structure and Usage: 
-        How the project is structured and how to run/use it. Explain, if relevant, what specific files do. No need to list every file, such as data or experimental ones (like the ones in sandbox).
-
-    Author name and contact
-        Harry Trevelyan
-        hjt24@ic.ac.uk
+## Author
+**Harry Trevelyan**  
+Email: [hjt24@ic.ac.uk](mailto:hjt24@ic.ac.uk)

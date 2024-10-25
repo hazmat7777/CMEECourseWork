@@ -1,3 +1,4 @@
+"""Script demonstrating the use of the csv module to read and write csv files."""
 import csv
 #read a file containing:
 # 'Species', 'Infraorder', 'Family', 'Distribution', 'Body mass male (Kg)'

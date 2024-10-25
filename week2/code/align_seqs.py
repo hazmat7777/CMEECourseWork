@@ -3,7 +3,6 @@
 """Aligns two sequences read from a csv file."""
 
 ## imports
-import ipdb
 import csv
 
 ## functions

@@ -1,4 +1,7 @@
+""" Using the try and except mechanisms"""
 def buggyfunc(x):
+    """Function which divides input x by all integers below x.
+    Demonstrates the transfer of control between try and except blocks. """
     y = x
     for i in range(x):
         try:           #if an error happens, transfer control to the except block
