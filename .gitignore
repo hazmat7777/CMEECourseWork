@@ -1,7 +1,7 @@
 *~ 
 *.tmp
 **/sandbox/
-**results/*
+**/results/*
 !**/results/.gitkeep
 *.exe
 *.o
