@@ -1,0 +1,2412 @@
+Starting testing for Harry, Week3
+
+Note that: 
+(1) Major sections begin with a double "====" line 
+(2) Subsections begin with a single "====" line 
+(3) Code output or text file content are printed within single "*****" lines 
+
+======================================================================
+======================================================================
+Your Git repo size this week is about 3.83 MiB on disk 
+
+PART 1: Checking project workflow...
+
+Found the following directories in parent directory: .git, week1, week2, Feedback, week3
+
+Found the following files in parent directory: .gitignore, README.md
+
+Checking for key files in parent directory...
+
+Found .gitignore in parent directory, great! 
+
+Printing contents of .gitignore:
+
+**********************************************************************
+*~ 
+*.tmp
+**/sandbox/
+**/results/*
+!**/results/.gitkeep
+*.exe
+*.o
+*.class
+*~
+.*.swp
+__pycache__/
+
+**********************************************************************
+
+Found README in parent directory, named: README.md
+
+Printing contents of README.md:
+
+**********************************************************************
+# My CMEE Coursework Repository
+
+## Brief Description
+Weekly coursework for CMEE MSc 2024-5.
+
+## Languages
+- Plain Text
+- Shell Script
+- Python
+- R
+
+## Dependencies and Installation
+See the weekly README files for dependencies and guidelines for their installation.
+
+## Project Structural Overview
+- **Week 1:** Shell Scripting
+- **Week 2:** Python
+- **Week 3:** R
+
+## Author
+**Harry Trevelyan**  
+Email: [hjt24@ic.ac.uk](mailto:hjt24@ic.ac.uk)
+
+**********************************************************************
+
+======================================================================
+Looking for the weekly directories...
+
+Found 3 weekly directories: week1, week2, week3
+
+The Week3 directory will be tested 
+
+======================================================================
+======================================================================
+PART 2: Checking weekly code and workflow...
+
+======================================================================
+Testing WEEK3...
+
+Found the following directories: results, data, code
+
+Found the following files: READMEwk3.md
+
+Checking for readme file in weekly directory...
+
+Found README in parent directory, named: READMEwk3.md
+
+Printing contents of READMEwk3.md:
+
+**********************************************************************
+My CMEE Coursework Repository
+
+    Brief description: 
+        week 3 coursework for CMEE MSc 2024-5
+
+    Languages: 
+        plain text
+        R
+
+    Dependencies: 
+        tidyverse
+
+    Installation: 
+        
+
+    Project structure and Usage: 
+        Code
+        Data
+        Results
+
+    Author name and contact
+        Harry Trevelyan
+        hjt24@ic.ac.uk
+**********************************************************************
+
+Results directory is empty - good! 
+
+Found 23 code files: break.R, sample.R, R_conditionals.R, Vectorize1.r, apply1.R, basic_io.R, Girko.R, boilerplate.R, apply2.R, DataWrang.R, try.R, MyFirstJupyterNb.ipynb, align_seqs_fasta.py, control_flow.R, oaks_debugme.py, MyBars.R, TreeHeight.R, TestR.py, TestR.R, plotLin.R, next.R, browse.R, preallocate.R
+
+======================================================================
+Testing script/code files...
+
+======================================================================
+Inspecting script file break.R...
+
+File contents are:
+
+**********************************************************************
+## illustrates how to break out of a loop when some condition is met
+
+i <- 0 #Initialize i
+    while (i < Inf) {
+        if (i == 10) {
+            break 
+        } else { # Break out of the while loop!  
+            cat("i equals " , i , " \n")
+            i <- i + 1 # Update i
+    }
+}
+**********************************************************************
+
+Testing break.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+i equals  0  
+i equals  1  
+i equals  2  
+i equals  3  
+i equals  4  
+i equals  5  
+i equals  6  
+i equals  7  
+i equals  8  
+i equals  9  
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.11366s
+
+======================================================================
+Inspecting script file sample.R...
+
+File contents are:
+
+**********************************************************************
+######## Functions #########
+
+## A function to take a sample of size n from a pop "popn" and return its mean
+myexperiment <- function(popn, n) {
+    pop_sample <- sample(popn, n, replace = FALSE)
+    return(mean(pop_sample))
+}
+
+## calculate means using a for loop on a vector without preallocation:
+loopy_sample1 <- function(popn, n, num) { #num is how many means you need to calc
+    result1 <- vector() #initialise empty vector of size 1
+    for(i in 1:num) {
+        result1 <- c(result1,myexperiment(popn, n)) #growing vector of means
+    }
+    return(result1)
+}
+
+## to run "num" iterations of the mean using a FOR loop on a vector with preallocation
+loopy_sample2 <- function(popn, n, num) {
+    result2 <- vector(,num) #preallocate expected size # first arg is empty so defaults to numeric # length is num
+    for(i in 1:num) {
+        result2[i] <- myexperiment(popn, n) #remember this takes the mean of a sample
+    }
+    return(result2)
+}
+
+## to run "num" iterations of the expt using a FOR loop on a list with preallocation:
+loopy_sample3 <- function(popn, n, num) {
+    result3 <- vector("list", num) #its a list type vector (ordered, hetero, flexible length)
+    for(i in 1:num) {
+        result3[[i]] <- myexperiment(popn, n) #in a list you access elements using [[]] double sq brs
+    }
+}
+
+## to run "num" iterations of the experiment with lapply:
+lapply_sample <- function(popn, n, num) {
+    result4 <- lapply(1:num, function(i) myexperiment(popn, n))
+    return(result4)
+}
+
+# lapply applies a fucntion to each element of a list/vector
+# returns results as a list
+
+## to run "num" iterations of the experiment using vectorisation with sapply:
+sapply_sample <- function(popn, n, num) {
+    result5 <- sapply(1:num, function(i) myexperiment(popn, n))
+    return(result5)
+}
+# sapply applies a function to each element of a list/vector and SIMPLIFIES the result
+# return value is a vector or matrix rather than a list
+
+
+### Generating a pop
+
+set.seed(12345)
+popn <- rnorm(10000) # gen the pop
+hist(popn)
+
+n <- 100 #sample size for each expt
+num <- 10000 # num of times to rerun the expt
+
+print("Using loops without preallocation on a vector took" )
+print(system.time(loopy_sample1(popn, n, num)))
+
+print("Using loops with preallocation on a vector took:" )
+print(system.time(loopy_sample2(popn, n, num)))
+
+print("Using loops with preallocation on a list took:" )
+print(system.time(loopy_sample3(popn, n, num)))
+
+print("Using the vectorized sapply function (on a list) took:" )
+print(system.time(sapply_sample(popn, n, num)))
+
+print("Using the vectorized lapply function (on a list) took:" )
+print(system.time(lapply_sample(popn, n, num)))######## Functions #########
+
+## A function to take a sample of size n from a pop "popn" and return its mean
+myexperiment <- function(popn, n) {
+    pop_sample <- sample(popn, n, replace = FALSE)
+    return(mean(pop_sample))
+}
+
+## calculate means using a for loop on a vector without preallocation:
+loopy_sample1 <- function(popn, n, num) { #num is how many means you need to calc
+    result1 <- vector() #initialise empty vector of size 1
+    for(i in 1:num) {
+        result1 <- c(result1,myexperiment(popn, n)) #growing vector of means
+    }
+    return(result1)
+}
+
+## to run "num" iterations of the mean using a FOR loop on a vector with preallocation
+loopy_sample2 <- function(popn, n, num) {
+    result2 <- vector(,num) #preallocate expected size # first arg is empty so defaults to numeric # length is num
+    for(i in 1:num) {
+        result2[i] <- myexperiment(popn, n) #remember this takes the mean of a sample
+    }
+    return(result2)
+}
+
+## to run "num" iterations of the expt using a FOR loop on a list with preallocation:
+loopy_sample3 <- function(popn, n, num) {
+    result3 <- vector("list", num) #its a list type vector (ordered, hetero, flexible length)
+    for(i in 1:num) {
+        result3[[i]] <- myexperiment(popn, n) #in a list you access elements using [[]] double sq brs
+    }
+}
+
+## to run "num" iterations of the experiment with lapply:
+lapply_sample <- function(popn, n, num) {
+    result4 <- lapply(1:num, function(i) myexperiment(popn, n))
+    result(result4)
+}
+
+# lapply applies a fucntion to each element of a list/vector
+# returns results as a list
+
+## to run "num" iterations of the experiment using vectorisation with sapply:
+sapply_sample <- function(popn, n, num) {
+    result5 <- sapply(1:num, function(i) myexperiment(popn, n))
+    return(result5)
+}
+# sapply applies a function to each element of a list/vector and SIMPLIFIES the result
+# return value is a vector or matrix rather than a list
+
+
+### Generating a pop
+
+set.seed(12345)
+popn <- rnorm(10000) # gen the pop
+hist(popn)
+
+n <- 100 #sample size for each expt
+num <- 10000 # num of times to rerun the expt
+
+print("Using loops without preallocation on a vector took" )
+print(system.time(loopy_sample1(popn, n, num)))
+
+print("Using loops with preallocation on a vector took:" )
+print(system.time(loopy_sample2(popn, n, num)))
+
+print("Using loops with preallocation on a list took:" )
+print(system.time(loopy_sample3(popn, n, num)))
+
+print("Using the vectorized sapply function (on a list) took:" )
+print(system.time(sapply_sample(popn, n, num)))
+
+print("Using the vectorized lapply function (on a list) took:" )
+print(system.time(lapply_sample(popn, n, num)))
+**********************************************************************
+
+Testing sample.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] "Using loops without preallocation on a vector took"
+   user  system elapsed 
+  0.170   0.013   0.183 
+[1] "Using loops with preallocation on a vector took:"
+   user  system elapsed 
+  0.115   0.000   0.114 
+[1] "Using loops with preallocation on a list took:"
+   user  system elapsed 
+  0.114   0.000   0.114 
+[1] "Using the vectorized sapply function (on a list) took:"
+   user  system elapsed 
+  0.114   0.000   0.114 
+[1] "Using the vectorized lapply function (on a list) took:"
+   user  syste
+**********************************************************************
+
+Encountered error (or warning):
+
+***IGNORE IF THIS ERROR IS EXPECTED AS PART OF AN IN-CLASS EXERCISE***
+
+Error in result(result4) : could not find function "result"
+Calls: print -> system.time -> lapply_sample
+Timing stopped at: 0.114 0 0.113
+Execution halted
+
+======================================================================
+Inspecting script file R_conditionals.R...
+
+File contents are:
+
+**********************************************************************
+## conditional functions
+
+#Checks if an itneger is even
+is.even <- function(n = 2) {
+    if (n %% 2 == 0) {
+        return(paste(n,'is even!'))
+    } else {
+        return(paste(n,'is odd!'))
+    }
+    } # get to grips with the curly brackets
+
+is.even(6)
+
+# checks if a number is a power of 2
+is.power2 <- function(n = 2) {
+    if (log2(n) %% 1==0) {                          #if log2 n is a whole number
+        return(paste(n, 'is a power of 2!'))
+    } else {
+        return(paste(n,'is not a power of 2!'))
+        }
+    }
+
+is.power2(4)
+
+# Checks if a number is prime
+is.prime <- function(n) {
+    if (n==0) {
+        return(paste(n,'is a zero!'))
+    } else if (n==1) {
+        return(paste(n,'is just a unit!'))
+    }
+
+    ints <- 2:(n-1)
+
+    if (all(n%%ints!=0)) {
+        return(paste(n,'is a prime!'))
+    } else {
+        return(paste(n,'is a composite!'))
+        }
+}
+
+print(is.even(6))
+print(is.power2(4))
+print(is.prime(17))
+
+**********************************************************************
+
+Testing R_conditionals.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] "6 is even!"
+[1] "4 is a power of 2!"
+[1] "6 is even!"
+[1] "4 is a power of 2!"
+[1] "17 is a prime!"
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.10371s
+
+======================================================================
+Inspecting script file Vectorize1.r...
+
+File contents are:
+
+**********************************************************************
+M <- matrix(runif(1000000), 1000,1000) #takes 1mil randos (from 0-1) and organises into a matrix w 1000 rows and cols
+
+SumAllElements <- function(M) {
+    Dimensions <- dim(M) # creates vector of rows and cols (1000,1000)
+    Tot <- 0
+    for (i in 1:Dimensions[1]) { # for every row
+        for (j in 1:Dimensions[2]) { #and every col
+            Tot <- Tot + M[i,j] #accumulate the total
+        }
+    }
+    return (Tot)
+}
+
+
+print("Using loops, the time taken is:")
+print(system.time(SumAllElements(M)))
+
+print("Using the in-built vectorised function, the time taken is:")
+print(system.time(sum(M)))
+**********************************************************************
+
+Testing Vectorize1.r...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] "Using loops, the time taken is:"
+   user  system elapsed 
+  0.030   0.000   0.031 
+[1] "Using the in-built vectorised function, the time taken is:"
+   user  system elapsed 
+  0.001   0.000   0.001 
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.15716s
+
+======================================================================
+Inspecting script file apply1.R...
+
+File contents are:
+
+**********************************************************************
+### apply
+
+# function family which can vectorise your code
+
+## build a random matrix
+M <- matrix(rnorm(100), 10, 10) #100 randos in 10 row 10 col
+
+## take the mean of each row
+RowMeans <- apply(M, 1, mean) # 2nd arg specifies MARGIN over which code is applied- 1 = over rows, 2 = over cols
+print (RowMeans)
+
+## now variance
+RowVars <- apply(M, 1, var)
+print (RowVars)
+
+## by column
+ColMeans <- apply(M, 2, mean) #margin = 2 = cols
+print (ColMeans)
+
+## can also apply your own functions (not inbuilt ones)
+
+SomeOperation <- function(v) {
+    if (sum(v) > 0) { #note that sum(v) is a single (scalar) value
+        return (v * 100) #the WHOLE VECTOR multiplied by 100 
+    } else {
+        return (v)
+    }
+}
+
+M <- matrix(rnorm(100), 10, 10)
+print (apply(M, 1, SomeOperation)) #by row
+
+
+**********************************************************************
+
+Testing apply1.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+ [1]  0.11059539  0.54466782 -0.04551637 -0.22388451  0.28631350  0.26896524
+ [7] -0.08930521  0.19979820  0.37424102  0.62243791
+ [1] 0.5132577 0.6994341 1.4285153 0.4291416 1.2064832 0.6804338 0.8174107
+ [8] 0.9504341 1.4368833 0.9350836
+ [1] -0.2393848  0.6130525  0.1599654  0.4406882 -0.3664953  0.4221404
+ [7] -0.1730861  0.3750947  0.6367150  0.1796230
+              [,1]       [,2]       [,3]       [,4]      [,5]        [,6]
+ [1,] -1.728626569 -0.5728712   43.02638  0.3810166 -10.19899  2.40
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.10004s
+
+======================================================================
+Inspecting script file basic_io.R...
+
+File contents are:
+
+**********************************************************************
+# A simple script to illustrate input-output
+
+MyData <- read.csv("../data/trees.csv", header = TRUE) #import w headers
+head(MyData)
+write.csv(MyData, "../results/MyData.csv")
+write.table(MyData[1,], file = "../results/MyData.csv", append = TRUE)
+write.csv(MyData, "../results/MyData.csv", row.names=TRUE) # write row names
+write.table(MyData, "../results/MyData.csv", col.names=FALSE) #ignore column names
+
+
+**********************************************************************
+
+Testing basic_io.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+             Species Distance.m Angle.degrees
+1    Populus tremula   31.66583      41.28264
+2      Quercus robur   45.98499      44.53592
+3      Ginkgo biloba   31.24177      25.14626
+4 Fraxinus excelsior   34.61667      23.33613
+5     Betula pendula   45.46617      38.34913
+6     Betula pendula   48.79550      33.59231
+
+**********************************************************************
+
+Encountered error (or warning):
+
+***IGNORE IF THIS ERROR IS EXPECTED AS PART OF AN IN-CLASS EXERCISE***
+
+Warning message:
+In write.table(MyData[1, ], file = "../results/MyData.csv", append = TRUE) :
+  appending column names to file
+
+======================================================================
+Inspecting script file Girko.R...
+
+File contents are:
+
+**********************************************************************
+## Plotting two dataframes together - Girko's law
+
+build_ellipse <- function(hradius, vradius){ # function that returns an ellipse
+    npoints = 250
+    a <- seq(0, 2 * pi, length = npoints + 1)
+    x <- hradius * cos(a)
+    y <- vradius * sin(a)
+    return(data.frame(x = x, y = y))
+}
+
+N <- 250 # assign size of matrix
+
+M <- matrix(rnorm(N * N), N, N) # build the matrix (250x250)
+
+eigvals <- eigen(M)$values # find the eigenvalues
+
+eigDF <- data.frame("Real" = Re(eigvals), "Imaginary" = Im(eigvals)) # build a dataframe
+
+my_radius <- sqrt(N) # the radius of the circle is sqrt(N)
+
+ellDF <- build_ellipse(my_radius, my_radius) # DF to plot the ellipse
+
+names(ellDF) <- c("Real", "Imaginary") # rename the columns
+
+# plotting the eigenvalues
+p <- ggplot(eigDF, aes(x = Real, y = Imaginary))
+p <- p +
+    geom_point(shape = I(3)) +
+    theme(legend.position = "none")
+
+# add vertical and horizontal lin e
+p <- p + geom_hline(aes(yintercept = 0))
+p <- p + geom_vline(aes(xintercept = 0))
+
+# finally add the ellipse
+p <- p + geom_polygon(data = ellDF, aes(x = Real, y = Imaginary, alpha = 1/20, fill = "red"))
+
+pdf("../results/Girko.pdf")
+print(p)
+dev.off()
+**********************************************************************
+
+Testing Girko.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+**********************************************************************
+
+Encountered error (or warning):
+
+***IGNORE IF THIS ERROR IS EXPECTED AS PART OF AN IN-CLASS EXERCISE***
+
+Error in ggplot(eigDF, aes(x = Real, y = Imaginary)) : 
+  could not find function "ggplot"
+Execution halted
+
+======================================================================
+Inspecting script file boilerplate.R...
+
+File contents are:
+
+**********************************************************************
+# A boilerplate R script
+
+MyFunction <- function(Arg1, Arg2) {
+
+    #statements involving Arg1, Arg2:
+    print(paste("Argument", as.character(Arg1), "is a", class(Arg1))) #print Arg1's type
+    print(paste("Argument", as.character(Arg2), "is a", class(Arg2))) #print Arg2's type
+
+    return (c(Arg1, Arg2))
+}
+#indentation not necessary (unlike py) but useful
+
+MyFunction(1,2) #test the function
+MyFunction("Riki","Tiki") #A different test
+
+
+
+
+
+**********************************************************************
+
+Testing boilerplate.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] "Argument 1 is a numeric"
+[1] "Argument 2 is a numeric"
+[1] 1 2
+[1] "Argument Riki is a character"
+[1] "Argument Tiki is a character"
+[1] "Riki" "Tiki"
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.09780s
+
+======================================================================
+Inspecting script file apply2.R...
+
+File contents are:
+
+**********************************************************************
+SomeOperation <- function(v) { # (What does this function do?)
+  if (sum(v) > 0) { #note that sum(v) is a single (scalar) value
+    return (v * 100)
+  } else { 
+  return (v)
+    }
+}
+
+M <- matrix(rnorm(100), 10, 10)
+print (apply(M, 1, SomeOperation))
+**********************************************************************
+
+Testing apply2.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+            [,1]       [,2]        [,3]       [,4]        [,5]       [,6]
+ [1,] -0.7284826 -67.567907  104.528448  -66.11883  0.95762622  0.5484398
+ [2,] -0.6653921 -10.003852 -160.455110  266.54530 -0.03889127  0.6348851
+ [3,] -0.6469317  60.043165   47.059486   43.91374 -1.48662070 -1.0142018
+ [4,]  0.4344313  -5.355113  -18.940304  -34.37723 -0.86748343 -0.5234789
+ [5,]  0.7527240   7.371365    1.802434  145.82754 -1.67336738 -0.8915439
+ [6,]  0.3541238  23.715453  129.684057   80.94725 -1.187
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.09847s
+
+======================================================================
+Inspecting script file DataWrang.R...
+
+File contents are:
+
+**********************************************************************
+################################################################
+################## Wrangling the Pound Hill Dataset ############
+################################################################
+
+############# Load the dataset ###############
+# header = false because the raw data don't have real headers
+MyData <- as.matrix(read.csv("../data/PoundHillData.csv", header = FALSE))
+
+# header = true because we do have metadata headers
+MyMetaData <- read.csv("../data/PoundHillMetaData.csv", header = TRUE, sep = ";")
+
+############# Inspect the dataset ###############
+head(MyData)
+dim(MyData) #45 rows and 60 columns (??) (see fix below)
+str(MyData) #structure: 45 rows, 60 cols, character type, preview of first few entries
+            #the  object has "dimnames" attributes with 2 components
+                #first (rownames) is NULL
+                #second (colnames) is a character vector (V1, V2..)
+fix(MyData) #you can also do this- it's really good
+fix(MyMetaData)
+
+############# Transpose ###############
+# To get those species into columns and treatments into rows 
+MyData <- t(MyData) # t for transpose
+                    # means swapping rows and columns
+fix (MyData)
+head(MyData)
+dim(MyData)
+
+############# Replace species absences with zeros ###############
+MyData[MyData == ""] = 0
+
+############# Convert raw matrix to data frame ###############
+
+TempData <- as.data.frame(MyData[-1,],stringsAsFactors = F) #stringsAsFactors = F is important! 
+                                #excludes first row
+colnames(TempData) <- MyData[1,] # assign column names from original data
+
+fix(TempData)
+
+############# Convert from wide to long format  ###############
+require(reshape2) # load the reshape2 package
+
+?melt #check out the melt function
+
+#this will put all species into a SINGLE column (wide to long format)
+MyWrangledData <- melt(TempData, id=c("Cultivation", "Block", "Plot", "Quadrat"), variable.name = "Species", value.name = "Count")
+                                #identifier variables that should remain as cols
+                                                                                # defines the name of the new col that will hold the names of the og cols
+fix(MyWrangledData)                                                                                                            #name of new col containing values from melted cols
+
+MyWrangledData[, "Cultivation"] <- as.factor(MyWrangledData[, "Cultivation"])
+MyWrangledData[, "Block"] <- as.factor(MyWrangledData[, "Block"])
+MyWrangledData[, "Plot"] <- as.factor(MyWrangledData[, "Plot"])
+MyWrangledData[, "Quadrat"] <- as.factor(MyWrangledData[, "Quadrat"])
+MyWrangledData[, "Count"] <- as.integer(MyWrangledData[, "Count"])
+
+str(MyWrangledData)
+head(MyWrangledData)
+dim(MyWrangledData)
+
+############# Exploring the data (extend the script below)  ###############
+
+require(tidyverse)
+
+tidyverse_packages(include_self = TRUE)
+
+MyWrangledData <- dplyr::as_tibble(MyWrangledData) # double colons say where the command comes from. Here is not necessary- could do MyWrangledData <- as_tibble(MyWrangledData) 
+class(MyWrangledData)
+#tibble is equiv to dataframe in R- modified to make data exploration more robust
+#good idea to convert- see link in notes
+
+glimpse(MyWrangledData) #like str() but nicer
+
+utils::View(MyWrangledData) #same as fix()
+
+filter(MyWrangledData, Count>100) #like subset() but nicer
+
+slice(MyWrangledData, 10:15) #look at a particular range of rows
+
+#using pipe operators %>% 
+
+MyWrangledData %>% 
+    group_by(Species) %>% 
+        summarise(avg = mean(Count))
+
+#the same as doing this in base R
+aggregate(MyWrangledData$Count, list(MyWrangledData$Species), FUN=mean)
+    #maybe less intuitive
+
+#### Data Visualisation
+
+### Data exploration with basic plotting
+
+# see basic plotting commands in R 
+
+MyDF <- read.csv("../data/EcolArchives-E089-51-D1.csv")
+dim(MyDF)
+str(MyDF)
+head(MyDF)
+require(tidyverse)
+glimpse(MyDF)
+
+#converting some columns to factors to use them as grouping variables
+MyDF$Type.of.feeding.interaction <- as.factor(MyDF$Type.of.feeding.interaction)
+MyDF$Location <- as.factor(MyDF$Location)
+str(MyDF) #note the new Factors
+
+## scatter plots
+
+plot(MyDF$Predator.mass,MyDF$Prey.mass)
+
+#try using logs
+    #because body sizes across species tend to be log-normally distributed 
+        #(the logs are normally distributed)
+        #i.e. there are lots of small species and few large ones
+        #now can inspect body size range in a meaningful scale
+plot(log(MyDF$Predator.mass), log(MyDF$Prey.mass)) #default log is ln (natural log, e)
+
+#same again with base 10
+plot(log10(MyDF$Predator.mass), log10(MyDF$Prey.mass))
+    #useful because you can see things in terms of orders of magnitude (10, 100, 1000 etc)
+
+plot(log10(MyDF$Predator.mass), log10(MyDF$Prey.mass), pch = 20) #change the plot characters pch to a different marker
+
+plot(log10(MyDF$Predator.mass), log10(MyDF$Prey.mass), pch=20, xlab = "Predator Mass (g)", ylab = "Prey Mass (g)") 
+
+## Histograms
+
+hist(MyDF$Predator.mass)
+
+hist(log10(MyDF$Predator.mass), xlab = "log10(Predator Mass (g))", ylab = "Count")
+
+hist(log10(MyDF$Predator.mass), xlab = "log10(Predator Mass (g))", ylab = "Count", col = "Lightblue", border = "pink") # see bookmarks for more on formatting in r
+
+hist(log10(MyDF$Prey.mass), xlab = "log10(Prey Mass (g))", ylab = "Count")
+
+?hist
+breakpred <- seq(floor(min(log10(MyDF$Predator.mass))), ceiling(max(log10(MyDF$Predator.mass))), by = 0.5) #setting the bins to have equal width. what is wrong with this?
+hist(log10(MyDF$Predator.mass), breaks = breakpred, 
+    xlab = "log10(Predator Mass (g))", 
+    ylab = "Count",
+    main = "Histogram of Log10 Predator Mass")
+
+#setting bins of equal width- make a vector of breakpoints
+breakprey <- seq(floor(min(log10(MyDF$Prey.mass))), #floor rounds down
+                ceiling(max(log10(MyDF$Prey.mass))), #ceiling rounds up
+                by = 0.5) 
+                
+
+hist(log10(MyDF$Prey.mass), breaks = breakprey, 
+    xlab = "log10(Prey Mass (g))", 
+    ylab = "Count",
+    main = "Histogram of Log10 Prey Mass")
+
+
+## subplots
+
+par(mfcol=c(2,1)) # initialise multi-paneled plot
+par(mfg = c(1,1)) # specify which subplot to use first
+hist(log10(MyDF$Predator.mass),
+    xlab = "log10(Predator Mass (g))", ylab = "Count", col = "Lightblue",
+    main = "Predator")
+par(mg = c(2,1)) #second subplot
+hist(log10(MyDF$Prey.mass), xlab="log10(Prey Mass (g))", ylab = "Count", 
+    col = "Lightgreen", main = "Prey")
+
+dev.off()
+graphics.off()
+
+par(mfcol=c(2,1)) #initialize multi-paneled plot. a vector of (rows,cols)
+par(mfg = c(1,1)) # specify which sub-plot to use first 
+hist(log10(MyDF$Predator.mass),
+    xlab = "log10(Predator Mass (g))", ylab = "Count", col = "lightblue", border = "pink", 
+    main = 'Predator') # Add title
+par(mfg = c(2,1)) # Second sub-plot
+hist(log10(MyDF$Prey.mass), xlab="log10(Prey Mass (g))",ylab="Count", col = "lightgreen", border = "pink", main = 'prey')
+
+
+#also see layout function
+
+#want to overlay the two plots
+
+hist(log10(MyDF$Predator.mass), # pred histogram
+    xlab="log10(Body Mass (g))", ylab = "Count",
+    col = rgb(1, 0, 0, 0.5), #red, 4th value is transparency
+    main = "Predator-Prey Size Overlap")
+hist(log10(MyDF$Prey.mass), col = rgb(0, 0, 1, 0.5), add = T) #ADDS to the old plot
+legend('topleft',c('Predators', 'Prey'),
+    fill=c(rgb(1, 0, 0, 0.5), rgb(0, 0, 1, 0.5)))
+
+#trying to use my breaks from before
+
+hist(log10(MyDF$Predator.mass), # pred histogram
+    xlab="log10(Body Mass (g))", ylab = "Count",
+    col = rgb(1, 0, 0, 0.5), #red, 4th value is transparency
+    main = "Predator-Prey Size Overlap", 
+    breaks = breakpred)
+hist(log10(MyDF$Prey.mass), col = rgb(0, 0, 1, 0.5), add = T, breaks = breakprey) #ADDS to the old plot
+legend('topleft',c('Predators', 'Prey'),
+    fill=c(rgb(1, 0, 0, 0.5), rgb(0, 0, 1, 0.5)))
+
+#it worked!
+
+## Boxplots
+graphics.off()
+dev.off()
+
+boxplot(log10(MyDF$Predator.mass), xlab = "Location", ylab = "Log10(Predator Mass)", main = "Predator mass")
+
+boxplot(log(MyDF$Predator.mass) ~ MyDF$Location, #why the tilde? it means BY
+    xlab = "Location", ylab = "Predator Mass", 
+    main = "Predator mass by location")
+
+boxplot(log(MyDF$Predator.mass) ~ MyDF$Type.of.feeding.interaction,
+    xlab = "Location", ylab = "Predator Mass",
+    main = "Predator mass by feeding interaction type")
+
+## combining plot types
+
+#how to see pred and prey distributions as well as the scatterplot
+#for exploring purposes
+
+par(fig=c(0,0.8,0,0.8)) # specify figure size as a proportion
+                        # bottom left is (0,0), top right is (1,1)
+                        #sets up scatterplot from 0-0.8 on x and 0-0.8 on y
+plot(log(MyDF$Predator.mass), log(MyDF$Prey.mass), xlab = "Predator Mass (g)", ylab = "Prey Mass (g)") # scatter w labels
+par(fig=c(0,0.8,0.5,1),new=TRUE)
+                        #next plot (pred boxplot will go from 0-0.8 on x, 0.5-1 on y)
+boxplot(log(MyDF$Predator.mass), horizontal = TRUE, axes = FALSE)
+par(fig=c(0.6,1,0,0.8),new = TRUE)
+boxplot(log(MyDF$Prey.mass), axes = FALSE)
+
+## saving your graphics
+
+pdf("../results/Pred_Prey_Overlay.pdf", #open blank pdf 
+    11.7, 8.3) #page dims in inches
+hist(log(MyDF$Predator.mass),
+    xlab = "Body Mass (g)", ylab = "Count", col = rgb(1,0,0,0.5),
+    main = "Predator-Prey Size Overlap")
+hist(log(MyDF$Prey.mass),
+    col = rgb(0, 0, 1, 0.5),
+    add = T)
+legend('topleft', c('Predators', 'Prey'),
+    fill=c(rgb(1,0,0,0.5), rgb(0,0,1,0.5)))
+graphics.off();
+
+### Beautiful graphics in R- ggplot2
+
+require(ggplot2)
+
+## qplot to quickly make graphics
+
+qplot(Prey.mass, Predator.mass, data = MyDF)
+
+# taking logarithms
+
+qplot(log10(Prey.mass), log(Predator.mass), data = MyDF)
+
+# colour points by feeding interaction
+
+qplot(log(Prey.mass), log(Predator.mass), data =  MyDF, colour = Type.of.feeding.interaction)
+
+# changing aspect ratio using asp option
+
+qplot(log(Prey.mass), log(Predator.mass), data =  MyDF, colour = Type.of.feeding.interaction, asp = 1)
+
+## aesthetic mappings
+
+qplot(log(Prey.mass), log(Predator.mass),
+    data = MyDF, colour = "red") # variable is mapped automatically to a colour
+# ggplot mapping converted it to a particular shade of red
+
+# use I() (for identity) to set it manually to the real red 
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, colour = I("red"))
+
+# see same comparison for point size:
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, size = 3) # with ggplot size mapping
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, size = I(3)) # no mapping
+
+# for shape there is no mapping (as shapes are discrete)
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, shape = 3) # gives an error
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, shape = I(3)) # gives an error
+
+## setting transparency
+
+# see overlap by using alpha to make points semi transparent
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, colour = Type.of.feeding.interaction, alpha = I(.5)) # using I() tells ggplot this is a constant value and not an aesthetic mapping
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, colour = Type.of.feeding.interaction, alpha = .5) # wrong- indicates transparency level applied to all points- wrong here
+
+## adding smoothers and regression lines
+
+# smoother
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, geom = c("point", "smooth"))
+
+# having linear regression
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, geom = c("point", "smooth")) + geom_smooth(method = "lm")
+
+# adding a smoother for each type of interaction
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, geom = c("point", "smooth"),
+    colour = Type.of.feeding.interaction) + geom_smooth(method = "lm")
+
+# ^ extending lines to full range
+qplot(log(Prey.mass), log(Predator.mass), data = MyDF, geom = c("point", "smooth"),
+    colour = Type.of.feeding.interaction) + geom_smooth(method = "lm", fullrange = TRUE)
+
+# ratio of pred/prey masses VS interaction type
+qplot(Type.of.feeding.interaction, log(Prey.mass/Predator.mass), data = MyDF)
+
+# adding jitter to get a better idea of spread of points (as there are too many)
+qplot(Type.of.feeding.interaction, log(Prey.mass/Predator.mass), data = MyDF, geom = "jitter")
+
+## Boxplots 
+
+#of the above using geom(etry) argument
+qplot(Type.of.feeding.interaction, log(Prey.mass/Predator.mass), data = MyDF, geom = "boxplot")
+
+## Histograms
+
+qplot(log(Prey.mass/Predator.mass), data = MyDF, geom =  "histogram")
+
+# colour by interaction
+qplot(log(Prey.mass/Predator.mass), data = MyDF, geom = "histogram",
+    fill = Type.of.feeding.interaction)
+
+# setting bin widths (in units of the x axis)
+qplot(log(Prey.mass/Predator.mass), data = MyDF, geom = "histogram", 
+    fill = Type.of.feeding.interaction, binwidth = 1)
+
+# smoothed density of the data for ease of reading
+qplot(log(Prey.mass/Predator.mass), data = MyDF, geom =  "density", 
+      fill = Type.of.feeding.interaction)
+
+# transparency to see overlaps
+qplot(log(Prey.mass/Predator.mass), data = MyDF, geom = "density",
+    fill = Type.of.feeding.interaction, alpha = I(0.5))
+
+# using colour not fill draws on the edge of the curve
+qplot(log(Prey.mass/Predator.mass), data = MyDF, geom =  "density", 
+      colour = Type.of.feeding.interaction)
+
+## multi-faceted plots
+
+# faceting- create multiple plots based on the levels of a categorical variable
+qplot(log(Prey.mass/Predator.mass), facets = Type.of.feeding.interaction ~., #note the tilda dot
+    data = MyDF, geom = "density")
+    # ~ separates the response variable (left) from the explanatory variables (right)
+    # dot (.) afterwards indicaes there are no explanatory variables
+
+# swapping . and Type means ggplot will use by-column config
+qplot(log(Prey.mass/Predator.mass), facets = .~ Type.of.feeding.interaction, #note the tilda dot
+    data = MyDF, geom = "density")
+
+## log axes
+
+# another way to plot data in the log scale
+qplot(Prey.mass, Predator.mass, data = MyDF, log="xy")
+
+## plot annotations
+
+# adding a title and labels
+qplot(Prey.mass, Predator.mass, data = MyDF, log="xy",
+    main = "Relation between predator and prey mass", 
+    xlab = "log(Prey mass) (g)", 
+    ylab = "log(Predator mass) (g)")
+
+# bw theme for bw printing
+qplot(Prey.mass, Predator.mass, data = MyDF, log="xy",
+    main = "Relation between predator and prey mass", 
+    xlab = "Prey mass (g)", 
+    ylab = "Predator mass (g)") + theme_bw()
+
+## saving plots as a pdf
+
+pdf("../results/MyFirst-ggplot2-Figure.pdf")
+print(qplot(Prey.mass, Predator.mass, data = MyDF, log="xy", # print necessary to create the output in the pdf
+    main = "Relation between predator and prey mass",        # and ensures whole command is kept together
+    xlab = "Prey mass (g)", 
+    ylab = "Predator mass (g)") + theme_bw())
+dev.off() # closes the pdf device, finalising and saving the file
+
+## the geom argument
+
+# specifies the objects that define the graph type
+dev.off()
+
+#load the data
+MyDF <- as.data.frame(read.csv("../data/EcolArchives-E089-51-D1.csv"))
+
+# barplot
+qplot(Predator.lifestage, data = MyDF, geom = "bar")
+
+# boxplot
+qplot(Predator.lifestage, log(Prey.mass), data = MyDF, geom = "boxplot")
+
+# violin plot
+qplot(Predator.lifestage, log(Prey.mass), data = MyDF, geom = "violin")
+
+# density
+qplot(log(Predator.mass), data = MyDF, geom = "density")
+
+# histogram
+qplot(log(Predator.mass), data = MyDF, geom = "histogram")
+
+# scatterplot
+qplot(log(Predator.mass), log(Prey.mass), data = MyDF, geom = "point")
+
+# smooth line
+qplot(log(Predator.mass), log(Prey.mass), data = MyDF, geom = "smooth") # what is grey bit at start?
+
+# linear
+qplot(log(Predator.mass), log(Prey.mass), data = MyDF, geom = "smooth", method = "lm")
+
+### advanced plotting - ggplot
+
+# qplot - only one dataset and a single set of aesthetics
+# with ggplot command we can layer:
+    # add additional data elements to a plot
+    # can come from different datasets with different aesthetic mappings
+
+# using ggplot we need
+    # the data in a dataframe
+    # aesthetics mappings
+    # geom
+    # (optional) some stat that transforms data / does stats on them
+
+# starting graph - specify data and aesthetics
+p <- ggplot(MyDF, aes(x = log(Predator.mass),
+                      y = log(Prey.mass),
+                      colour = Type.of.feeding.interaction))
+
+# trying to plot graph:
+p # no geom yet set
+p + geom_point()
+
+# can use + to concatenate commands
+p <- ggplot(MyDF, aes(x = log(Predator.mass), 
+                      y = log(Prey.mass), 
+                      colour = Type.of.feeding.interaction))
+q <- p + geom_point(size = I(2), shape = I(10)) + 
+    theme_bw() + # make the background white
+    theme(aspect.ratio = 1) # make the plot square
+q
+
+# removing legend
+q + theme(legend.position = "none")
+
+# density
+p <- ggplot(MyDF, aes(x = log(Prey.mass / Predator.mass), 
+                      fill = Type.of.feeding.interaction)) + 
+    geom_density()
+p
+
+# transparency
+p <- ggplot(MyDF, aes(x = log(Prey.mass / Predator.mass), 
+                      fill = Type.of.feeding.interaction)) + 
+    geom_density(alpha = 0.5)
+p
+
+## multifaceted
+p <- ggplot(MyDF, aes(x = log(Prey.mass / Predator.mass), 
+                      fill = Type.of.feeding.interaction)) +
+    geom_density() +
+    facet_wrap(. ~ Type.of.feeding.interaction) +
+    theme(legend.position = "none") # YOU CANNOT PUT PLUSSES AT THE START OF LINES
+p
+
+# allowing data-specific axis limits
+p <- ggplot(MyDF, aes(x = log(Prey.mass / Predator.mass), 
+                      fill = Type.of.feeding.interaction)) +  
+    geom_density() + 
+    facet_wrap(. ~ Type.of.feeding.interaction, scales = "free")
+p
+
+# plotting size-ratio distributions by location
+p <- ggplot(MyDF, aes(x = log(Prey.mass / Predator.mass))) +  
+    geom_density() + 
+    facet_wrap(. ~ Location, scales = "free")
+p
+
+# pred size vs prey size, scatter, by location 
+p <- ggplot(MyDF, aes(x = log(Prey.mass), 
+                      y = log(Predator.mass))) +  
+    geom_point() + 
+    facet_wrap(. ~ Location, scales = "free")
+p
+
+# same thing BUT ALSO BY FEEDING INTERACTION
+p <- ggplot(MyDF, aes(x = log(Prey.mass), 
+                      y = log(Predator.mass))) +  
+    geom_point() + 
+    facet_wrap(. ~ Location + Type.of.feeding.interaction, scales = "free")
+p # BIG plot
+
+# changing the order
+p <- ggplot(MyDF, aes(x = log(Prey.mass), 
+                      y = log(Predator.mass))) +  
+    geom_point() + 
+    facet_wrap(. ~ Type.of.feeding.interaction + Location, scales = "free")
+p
+
+### Useful ggplot examples
+dev.off()
+
+require(reshape2)
+
+# function to make a matrix
+GenerateMatrix <- function(N) {
+    M <- matrix(runif(N * N), N, N) # generates matrix with N * N random numbers and organizes them into an NxN matrix
+    return(M)
+}
+
+# making a DF
+M <- GenerateMatrix(10) # 10 by 10 matrix with 10 randos
+Melt <- melt(M) # converts matrix to a long form data frame
+
+Melt # note DF has three columns - Var1 (row), Var2 (col), and value (the rando)
+
+# tile plot
+p <- ggplot(Melt, aes(Var1, Var2, fill = value)) +
+    geom_tile() +
+    theme(aspect.ratio = 1) # square
+p
+
+# add a black line dividing cells
+p + geom_tile(colour = "black")
+
+# no legend
+p + theme(legend.position = "none")
+
+# remove everything else
+p + theme(legend.position = "none", 
+          panel.background = element_blank(),
+          axis.ticks = element_blank(), 
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          axis.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.title.y = element_blank())
+
+# changing colours
+p + scale_fill_continuous(low = "yellow", high = "darkgreen")
+p + scale_fill_gradient2()
+p + scale_fill_gradientn(colours = grey.colors(10))
+p + scale_fill_gradientn(colours = rainbow(10))
+p + scale_fill_gradientn(colours = c("red", "white", "blue"))
+
+# interactive graphs??
+# plotly package
+
+## Plotting two dataframes together - Girko's law
+
+build_ellipse <- function(hradius, vradius) { # function that returns an ellipse
+    npoints = 250
+    a <- seq(0, 2 * pi, length = npoints + 1)
+    x <- hradius * cos(a)
+    y <- vradius * sin(a)
+    return(data.frame(x = x, y = y))
+}
+
+N <- 250 # assign size of matrix
+
+M <- matrix(rnorm(N * N), N, N) # build the matrix (250x250)
+
+eigvals <- eigen(M)$values # find the eigenvalues
+
+eigDF <- data.frame("Real" = Re(eigvals), "Imaginary" = Im(eigvals)) # build a dataframe
+
+my_radius <- sqrt(N) # the radius of the circle is sqrt(N)
+
+ellDF <- build_ellipse(my_radius, my_radius) # DF to plot the ellipse
+
+names(ellDF) <- c("Real", "Imaginary") # rename the columns
+
+# plotting the eigenvalues
+p <- ggplot(eigDF, aes(x = Real, y = Imaginary))
+p <- p +
+    geom_point(shape = I(3)) +
+    theme(legend.position = "none")
+
+# add vertical and horizontal line
+p <- p + geom_hline(aes(yintercept = 0))
+p <- p + geom_vline(aes(xintercept = 0))
+
+# finally add the ellipse
+p <- p + geom_polygon(data = ellDF, aes(x = Real, y = Imaginary, alpha = 1/20, fill = "red"))
+p
+
+### Annotating plots
+require(tidyverse)
+
+a <- read.table("../data/Results.txt", header = TRUE)
+
+head(a)
+
+a$ymin <- rep(0, dim(a)[1]) # append a column of zeros
+
+# Print the first linerange
+p <- ggplot(a)
+p <- p + geom_linerange(data = a, aes(
+    x = x,
+    ymin = ymin,
+    ymax = y1,
+    linewidth = (0.5)
+),
+colour = "#E69F00",
+alpha = 1/2, show.legend = FALSE)
+
+# Print the second linerange
+p <- p + geom_linerange(data = a, aes(
+    x = x,
+    ymin = ymin,
+    ymax = y2,
+    linewidth = (0.5)
+),
+colour = "#56B4E9",
+alpha = 1/2, show.legend = FALSE)
+
+# Print the third linerange
+p <- p + geom_linerange(data = a, aes(
+    x = x,
+    ymin = ymin,
+    ymax = y3,
+    size = (0.5)
+),
+colour = "#D55E00",
+alpha = 1/2, show.legend = FALSE)
+
+# Annotate the plot with labels
+p <- p + geom_text(data = a, aes(x = x, y = -500, label = Label))
+
+# now set the axis labels, remove the legend, and prepare for bw printing
+p <- p + scale_x_continuous("My x axis",
+                             breaks = seq(3, 5, by = 0.05)) + 
+                             scale_y_continuous("My y axis") + 
+                             theme_bw() + 
+                             theme(legend.position = "none")
+p
+
+### Mathematical display
+dev.off()
+x <- seq(0, 100, by = 0.1)
+y <- -4. + 0.25 * x +
+    rnorm(length(x), mean = 0., sd = 2.5) # randos
+
+# put them in a df
+my_data <- data.frame(x = x, y = y)
+
+head(my_data)
+
+# perform a linear regression
+my_lm <- summary(lm(y ~ x, data = my_data))
+
+my_lm # understanding this summary is key to understanding the rest of the code
+
+# plot the data
+p <- ggplot(my_data, aes(x = x, y = y,
+                          colour = abs(my_lm$residual))) +
+    geom_point() +
+    scale_colour_gradient(low = "black", high = "red") +
+    theme(legend.position = "none") +
+    scale_x_continuous(expression(alpha^2 * pi / beta * sqrt(Theta)))
+
+# add the regression line
+p <- p + geom_abline(
+    intercept = my_lm$coefficients[1][1],
+    slope = my_lm$coefficients[2][1],
+    colour = "red")
+
+# throw some math on the plot
+p <- p + geom_text(aes(x = 60, y = 0,
+                       label = "sqrt(alpha) * 2* pi"), 
+                       parse = TRUE, size = 6, 
+                       colour = "blue")
+
+p
+
+## ggthemes package
+
+install.packages("ggthemes")
+
+library(ggthemes)
+
+p <- ggplot(MyDF, aes(x = log(Predator.mass), y = log(Prey.mass),
+                colour = Type.of.feeding.interaction )) +
+                geom_point(size=I(2), shape=I(10)) + theme_bw()
+
+p + geom_rangeframe() + # now fine tune the geom to Tufte's range frame
+        theme_tufte() # and theme to Tufte's minimal ink theme
+**********************************************************************
+
+Testing DataWrang.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+     V1                     V2        V3        V4        V5        V6       
+[1,] "Cultivation"          "october" "october" "october" "october" "october"
+[2,] "Block"                "a"       "a"       "a"       "a"       "a"      
+[3,] "Plot"                 "1"       "1"       "1"       "1"       "1"      
+[4,] "Quadrat"              "Q1"      "Q2"      "Q3"      "Q4"      "Q5"     
+[5,] "Achillea millefolium" "4"       "8"       "3"       "20"      "6"      
+[6,] "Agrostis gigantea"    ""   
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 10.00886s
+
+======================================================================
+Inspecting script file try.R...
+
+File contents are:
+
+**********************************************************************
+doit <- function(x) {
+    # finds the mean of a sample of x
+    temp_x <- sample(x, replace = TRUE) # by default sample size will be the number of elements in x (here = 50)
+    if(length(unique(temp_x)) > 30) {# only take mean if sample is sufficient
+        print(paste("Mean of this sample was:", as.character(mean(temp_x))))
+        }
+    else {
+        stop("Couldn't calculate mean: too few unique values!")
+    }
+}
+
+set.seed(1345) # to get the same result
+
+popn <- rnorm(50)
+
+hist(popn)
+
+
+lapply(1:15, function(i) doit(popn)) # applies the doit function 15 times to popn
+
+# error- there weren't 30 unique values. Then it stops
+
+# Using try
+
+result <- lapply(1:15, function(i) try(doit(popn), FALSE))
+
+# no error this time because the FALSE modifier for try suppresses any error messages
+
+class(result) # lapply always creates a list
+
+result # long output
+
+# can also store results manually using a loop
+
+result <- vector("list", 15) # preallocate
+for(i in 1:15) {
+    result[[i]] <- try(doit(popn), FALSE)
+}
+
+# see tryCatch() as an alternative to try()
+
+
+**********************************************************************
+
+Testing try.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] "Mean of this sample was: -0.11620822588674"
+[1] "Mean of this sample was: -0.0468516755995931"
+[1] "Mean of this sample was: -0.0890228211466614"
+[1] "Mean of this sample was: -0.124229742255296"
+
+**********************************************************************
+
+Encountered error (or warning):
+
+***IGNORE IF THIS ERROR IS EXPECTED AS PART OF AN IN-CLASS EXERCISE***
+
+Error in doit(popn) : Couldn't calculate mean: too few unique values!
+Calls: lapply -> FUN -> doit
+Execution halted
+
+======================================================================
+Inspecting script file MyFirstJupyterNb.ipynb...
+
+File contents are:
+
+**********************************************************************
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "f868c4d7",
+   "metadata": {},
+   "source": [
+    "$$\n",
+    "    \\frac{dN}{dt} = rN \\left( 1-\\frac{N}{K}\\right)\n",
+    "$$"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "42618101",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "this is python!\n"
+     ]
+    }
+   ],
+   "source": [
+    "# in python kernel\n",
+    "a = \"this is python!\"; print(a)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e478f213",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
+
+**********************************************************************
+
+Testing MyFirstJupyterNb.ipynb...
+
+======================================================================
+Inspecting script file align_seqs_fasta.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env python3
+
+"""
+Use functions to find the longest matching sequence in two files of DNA sequences and save the result as a text file
+"""
+__author__ = 'Dashing_Dingos(4)'
+__version__ = '0.2.2'
+
+import sys
+import os
+
+
+def read_file(file_name):
+    """Reads a fasta file and returns the sequence and the sequence name"""
+    try:
+        with open(file_name) as f:
+            seq_name = f.readline().strip()  # Get the sequence name
+            sequence = f.read().strip().replace("\n", "")  # Get the sequence data
+    except FileNotFoundError: # Checking the file exists
+        print(f"Error: The file {file_name} does not exist.")
+        sys.exit(1) # Terminate the program if there is no
+
+    return seq_name, sequence
+
+
+def calculate_score_and_alignment(s1, s2, l1, l2, startpoint):
+    """Calculate the alignment score and returns the alignment details"""
+    matched = ""  # To hold string displaying matches (*) and mismatches (-)
+    alignment_s1 = "." * startpoint + s2  # Align s2 starting at the given point
+    score = 0
+    for i in range(l2):
+        if (i + startpoint) < l1:
+            if s1[i + startpoint] == s2[i]:  # If the bases match
+                matched += "*"
+                score += 1
+            else:
+                matched += "-"
+    matched = "." * startpoint + matched # line up matched with the best alignment
+    return score, alignment_s1, matched
+
+
+def compare_seq_score(s1, s2, l1, l2):
+    """Find the best alignment and return its score and the alignment"""
+    best_align = None # Holds string for best alignment 
+    best_score = -1 # Store highest score so far (-1 to be lower than any possible score)
+    best_match = None # Holds string for best base matches
+    for i in range(l1):  # Iterate over all possible starting points
+        # Calculate score/alignment for each possible starting position (i)  for s2 within s1
+        current_score, alignment_s1, matched = calculate_score_and_alignment(s1, s2, l1, l2, i)
+        # Update the best alignment and store values 
+        if current_score > best_score: 
+            best_align = alignment_s1
+            best_score = current_score
+            best_match = matched
+    return best_score, best_align, best_match
+
+
+def format_alignment(s1, s2, match_line, line_length=80):
+    """Format the alignment output for better readability"""
+    output = ""    # Initialize an empty string to store the formatted output.
+    
+    # Iterate through the sequences, breaking them into chunks of 'line_length' characters.
+    for i in range(0, len(s1), line_length):
+        output += s1[i:i+line_length] + "\n"   # Add a substring of the first sequence, up to 'line_length' characters per line.
+        output += match_line[i:i+line_length] + "\n"   # Add the corresponding substring of the match line (alignment indicators).
+        output += s2[i:i+line_length] + "\n\n"   # Add the corresponding substring of the second sequence, up to 'line_length' characters per line.
+    return output   # Return the formatted alignment string.
+
+
+def save_results(seq_name1, seq_name2, best_score, best_align, match_line, original_s1, line_length=80):
+    """Save the best alignment and score as a text file"""
+    output_dir = "../results"               # Directory to save the output text file.
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Format the result for text output
+    formatted_alignment = format_alignment(original_s1, best_align, match_line, line_length)
+    
+    # Define the file path for saving the alignment resul
+    output_file_txt = os.path.join(output_dir, "align_seqs_fasta.txt")
+    
+    # Open the file in write mode and save the alignment details.
+    with open(output_file_txt, "w") as f:   
+        f.write(f"Alignment between {seq_name1} and {seq_name2}\n\n")   # Write sequence names. 
+        f.write(f"Best alignment score: {best_score}\n\n")  # Write the best alignment score. 
+        f.write(formatted_alignment)    # Write the formatted alignment
+    print(f"Text file saved to {output_file_txt}")   # Print a message to indicate the file was saved successfully.
+
+
+def main(file1, file2):
+    """
+    Main function to read two fasta files, compute the best alignment between their sequences, 
+    and save the alignment result to a file.
+
+    Args:
+    file1 (str): Path to the first fasta file.
+    file2 (str): Path to the second fasta file.
+    """
+    # Read the first sequence file
+    seq_name1, seq1 = read_file(file1)
+
+    # Read the second sequence file
+    seq_name2, seq2 = read_file(file2)
+
+    # Get the lengths of the two sequences
+    l1, l2 = len(seq1), len(seq2)
+
+    # Ensure s1 is the longer sequence
+    if l2 > l1:
+        seq1, seq2 = seq2, seq1
+        l1, l2 = l2, l1
+        seq_name1, seq_name2 = seq_name2, seq_name1
+    # Compute the best alignment, score, and match line between the two sequences
+    best_score, best_align, match_line = compare_seq_score(seq1, seq2, l1, l2)
+
+    # Save the alignment results to an output file
+    save_results(seq_name1, seq_name2, best_score, best_align, match_line, seq1)
+
+
+if __name__ == "__main__":
+    # Check if exactly 2 arguments are provided
+    if len(sys.argv) == 3:
+        main(sys.argv[1], sys.argv[2])
+    
+    # If only 1 argument is provided, use a default second file
+    elif len(sys.argv) == 2:
+        print("Warning: Only one input file provided, using default second file.")
+        main(sys.argv[1], "../data/fasta/407228326.fasta")
+        
+    # If no arguments are provided, use two default files
+    elif len(sys.argv) == 1:
+        print("No input provided, using default files.")
+        main("../data/fasta/407228412.fasta", "../data/fasta/407228326.fasta")
+    # Handle incorrect input (more than 2 arguments)
+    else:
+        print("Error: Incorrect input format. Provide 0, 1, or 2 fasta files.")
+        sys.exit(1)
+**********************************************************************
+
+Testing align_seqs_fasta.py...
+
+align_seqs_fasta.py is a Python script file;
+
+checking for docstrings...
+
+Found one or more docstrings and functions
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+No input provided, using default files.
+Text file saved to ../results/align_seqs_fasta.txt
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 1.20609s
+
+======================================================================
+Inspecting script file control_flow.R...
+
+File contents are:
+
+**********************************************************************
+## If statements
+
+a <- TRUE
+if (a == TRUE) {
+    print ("a is TRUE")
+} else {
+    print ("a is FALSE")
+}
+
+z <- runif(1) ## generate a nuiformly distributed random no
+if (z <= 0.5) {print ("Less than a half")} # can squeeze on one line but less readable
+
+#better:
+z <- runif(1)
+if (z <= 0.5) {
+    print ("Less than a half")
+   }
+
+## for loops
+
+for (i in 1:10) {       #same as seq(10)
+    j <- i * i 
+    print(paste(i, "squared is", j ))
+}
+
+# can loop over a vector of strings:
+
+for(species in c('Heliodoxa rubinoides', #notice that for in r needs brackets
+                 'Boissonneaua jardini', 
+                 'Sula nebouxii')) {
+      print(paste('The species is', species))
+} #why are these on separate lines?
+
+v1 <- c("a", "bc", "def")
+for (i in v1) {          #for needs brackets in r
+    print(i)
+}
+
+## while loops
+
+i <- 0
+while (i < 10) {
+    i <- i+1
+    print(i^2)
+}
+
+## breaking out of loops
+
+i <- 0 #initialise i
+    while (i < Inf) {
+        if (i ==10) {
+            break #break out of the while loop!
+        } else { 
+            cat("i equals ", i, "\n")
+            i <- i + 1 #update i
+    }
+}
+
+## using next
+
+for (i in 1:10) {
+    if ((i%% 2) == 0) #check if no is even
+        next # pass to next iteration of loop (skip the evens)
+    print(i)
+}
+**********************************************************************
+
+Testing control_flow.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] "a is TRUE"
+[1] "Less than a half"
+[1] "1 squared is 1"
+[1] "2 squared is 4"
+[1] "3 squared is 9"
+[1] "4 squared is 16"
+[1] "5 squared is 25"
+[1] "6 squared is 36"
+[1] "7 squared is 49"
+[1] "8 squared is 64"
+[1] "9 squared is 81"
+[1] "10 squared is 100"
+[1] "The species is Heliodoxa rubinoides"
+[1] "The species is Boissonneaua jardini"
+[1] "The species is Sula nebouxii"
+[1] "a"
+[1] "bc"
+[1] "def"
+[1] 1
+[1] 4
+[1] 9
+[1] 16
+[1] 25
+[1] 36
+[1] 49
+[1] 64
+[1] 81
+[1] 100
+i equals  0 
+i equals  1 
+i e
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.10884s
+
+======================================================================
+Inspecting script file oaks_debugme.py...
+
+File contents are:
+
+**********************************************************************
+#!/usr/bin/env ipython3
+
+"""Script to identify oaks from a csv file and output them to a separate file."""
+
+__appname__ = 'oaks_debugme.py'
+__author__ = 'dashing_dingos(4)'
+
+
+### Imports ###
+import csv  # CSV module for file operations
+import sys  # Sys module for command line arguments
+import doctest  # Doctest for running tests
+
+
+### Functions ###
+def is_an_oak(name):
+    """ Returns True if name starts with 'quercus' 
+    >>> is_an_oak('quercus petraea')
+    True
+    >>> is_an_oak('Quercus petraea')
+    True
+    >>> is_an_oak('Quercuss petraea')
+    False
+    >>> is_an_oak('Quercusquercus petraea')
+    False
+    >>> is_an_oak('Fraxinus excelsior')
+    False
+    >>> is_an_oak('Fagus sylvatica')
+    False
+    """
+    # Check if the first word matches 'quercus'
+    return name.lower() == "quercus"
+    
+    
+def main(argv): 
+    """ Main entry point of the program"""
+    with open('../data/TestOaksData.csv','r') as f, open('../data/JustOaksData.csv','w') as g:
+        taxa = csv.reader(f)
+        csvwrite = csv.writer(g)
+        csvwrite.writerow(['Genus', ' Species'])
+        next(taxa) # skip the header row
+        for row in taxa:
+            print(row)
+            print ("The genus is: ") 
+            print(row[0] + '\n')
+            if is_an_oak(row[0]):
+                print('FOUND AN OAK!\n')
+                csvwrite.writerow([row[0], row[1]])
+            else:
+                print('Not an oak.\n')    
+
+    return 0
+
+if (__name__ == "__main__"): #Ensures main function runs when called from command line
+    status = main(sys.argv)  # Run main function with arguments
+    doctest.testmod()  # Run embedded tests
+**********************************************************************
+
+Testing oaks_debugme.py...
+
+oaks_debugme.py is a Python script file;
+
+checking for docstrings...
+
+Found one or more docstrings and functions
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+['Quercus', ' robur']
+The genus is: 
+Quercus
+
+FOUND AN OAK!
+
+['Fraxinus', ' excelsior']
+The genus is: 
+Fraxinus
+
+Not an oak.
+
+['Pinus', ' sylvestris']
+The genus is: 
+Pinus
+
+Not an oak.
+
+['Quercus', ' cerris']
+The genus is: 
+Quercus
+
+FOUND AN OAK!
+
+['Quercus', ' petraea']
+The genus is: 
+Quercus
+
+FOUND AN OAK!
+
+**********************************************************************
+File "/home/mhasoba/Documents/Teaching/IC_CMEE/2024-25/Coursework/StudentRepos/HarryTrevelyan_hjt24/week3/code/oaks_deb
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.03213s
+
+======================================================================
+Inspecting script file MyBars.R...
+
+File contents are:
+
+**********************************************************************
+### Annotating plots
+require(tidyverse)
+
+a <- read.table("../data/Results.txt", header = TRUE)
+
+head(a)
+
+a$ymin <- rep(0, dim(a)[1]) # append a column of zeros
+
+# Print the first linerange
+p <- ggplot(a)
+p <- p + geom_linerange(data = a, aes(
+                            x = x,
+                            ymin = ymin,
+                            ymax = y1,
+                            linewidth = (0.5)
+                            ),
+                        colour = "#E69F00",
+                        alpha = 1/2, show.legend = FALSE)
+# Print the second linerange
+p <- p + geom_linerange(data = a, aes(
+                            x = x,
+                            ymin = ymin,
+                            ymax = y2,
+                            linewidth = (0.5)
+                            ),
+                        colour = "#56B4E9",
+                        alpha = 1/2, show.legend = FALSE)
+
+# Print the third linerange:
+p <- p + geom_linerange(data = a, aes(
+                          x = x,
+                          ymin = ymin,
+                          ymax = y3,
+                          size = (0.5)
+                          ),
+                        colour = "#D55E00",
+                        alpha = 1/2, show.legend = FALSE)
+
+# Annotate the plot with labels
+p <- p + geom_text(data = a, aes(x = x, y = -500, label = Label))
+
+# now set the axis labels, remove the legend, and prepare for bw printing
+p <- p + scale_x_continuous("My x axis",
+                            breaks = seq(3, 5, by = 0.05)) + 
+                            scale_y_continuous("My y axis") + 
+                            theme_bw() + 
+                            theme(legend.position = "none") 
+
+# saving result as a pdf
+pdf("../results/MyBars.pdf")
+print(p)
+dev.off()
+**********************************************************************
+
+Testing MyBars.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+         x   y1   y2 y3 Label
+1 3.515424 4320 4320  0  <NA>
+2 3.533984 2160 2160  0  <NA>
+3 3.557647 4320 4320  0  <NA>
+4 3.569953 4320 4320  0  <NA>
+5 3.578984 8640 8640  0  <NA>
+6 3.585665 2160 2160  0  <NA>
+null device 
+          1 
+
+**********************************************************************
+
+Encountered error (or warning):
+
+***IGNORE IF THIS ERROR IS EXPECTED AS PART OF AN IN-CLASS EXERCISE***
+
+Loading required package: tidyverse
+── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+Warning message:
+Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead. 
+Warning message:
+Removed 91 rows containing missing values or values outside the scale range
+(`geom_text()`). 
+
+======================================================================
+Inspecting script file TreeHeight.R...
+
+File contents are:
+
+**********************************************************************
+# This function calculates heights of trees given distance of each tree 
+# from its base and angle to its top, using  the trigonometric formula 
+#
+# height = distance * tan(radians)
+#
+# ARGUMENTS
+# degrees:   The angle of elevation of tree
+# distance:  The distance from base of tree (e.g., meters)
+#
+# OUTPUT
+# The heights of the tree, same units as "distance"
+
+TreeHeight <- function(degrees, distance) {
+    radians <- degrees * pi / 180
+    height <- distance * tan(radians)
+    print(paste("Tree height is:", height))
+
+    return (height)
+}
+
+TreeHeight(37, 40)
+**********************************************************************
+
+Testing TreeHeight.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] "Tree height is: 30.1421620041118"
+[1] 30.14216
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.08937s
+
+======================================================================
+Inspecting script file TestR.py...
+
+File contents are:
+
+**********************************************************************
+import subprocess
+p = subprocess.Popen("Rscript --verbose TestR.R > ../results/TestR.Rout 2> ../results/TestR_errFile.Rout", shell=True).wait()
+**********************************************************************
+
+Testing TestR.py...
+
+TestR.py is a Python script file;
+
+checking for docstrings...
+
+No functions, but no script-level docstring either
+Output (only first 500 characters): 
+
+
+**********************************************************************
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.10679s
+
+======================================================================
+Inspecting script file TestR.R...
+
+File contents are:
+
+**********************************************************************
+print("Hello, this is R!")
+**********************************************************************
+
+Testing TestR.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] "Hello, this is R!"
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.08981s
+
+======================================================================
+Inspecting script file plotLin.R...
+
+File contents are:
+
+**********************************************************************
+### Mathematical display
+x <- seq(0, 100, by = 0.1)
+y <- -4. + 0.25 * x +
+    rnorm(length(x), mean = 0., sd = 2.5) # randos
+
+
+
+# put them in a df
+my_data <- data.frame(x = x, y = y)
+
+head(my_data)
+
+# perform a linear regression
+my_lm <- summary(lm(y ~ x, data = my_data))
+
+my_lm # understanding this summary is key to understanding the rest of the code
+
+# plot the data
+p <- ggplot(my_data, aes(x = x, y = y,
+                        colour = abs(my_lm$residual))
+                ) +
+        geom_point() +
+        scale_colour_gradient(low = "black", high = "red") +
+        theme(legend.position = "none") +
+        scale_x_continuous(
+            expression(alpha^2 * pi / beta * sqrt(Theta)))
+
+# add the regression line
+p <- p + geom_abline(
+    intercept = my_lm$coefficients[1][1],
+    slope = my_lm$coefficients[2][1],
+    colour = "red")
+
+# throw some math on the plot
+p <- p + geom_text(aes(x = 60, y = 0,
+                       label = "sqrt(alpha) * 2* pi"), 
+                       parse = TRUE, size = 6, 
+                       colour = "blue")
+
+pdf("../results/MyLinReg.pdf")
+print(p)
+dev.off()
+**********************************************************************
+
+Testing plotLin.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+    x          y
+1 0.0  0.5759601
+2 0.1 -6.2026121
+3 0.2 -8.6873798
+4 0.3 -4.4079910
+5 0.4 -6.9856021
+6 0.5 -3.8926260
+
+Call:
+lm(formula = y ~ x, data = my_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-8.7597 -1.6492  0.0352  1.6688  6.5189 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -4.169750   0.153244  -27.21   <2e-16 ***
+x            0.252342   0.002654   95.09   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+**********************************************************************
+
+Encountered error (or warning):
+
+***IGNORE IF THIS ERROR IS EXPECTED AS PART OF AN IN-CLASS EXERCISE***
+
+Error in ggplot(my_data, aes(x = x, y = y, colour = abs(my_lm$residual))) : 
+  could not find function "ggplot"
+Execution halted
+
+======================================================================
+Inspecting script file next.R...
+
+File contents are:
+
+**********************************************************************
+for (i in 1:10) {
+  if ((i %% 2) == 0) # check if the number is odd
+    next # pass to next iteration of loop 
+  print(i)
+}
+**********************************************************************
+
+Testing next.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+[1] 1
+[1] 3
+[1] 5
+[1] 7
+[1] 9
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.10227s
+
+======================================================================
+Inspecting script file browse.R...
+
+File contents are:
+
+**********************************************************************
+Exponential <- function(N0 = 1, r = 1, generations = 10) {
+    #runs a simulation of exponential growth
+    # returns a vector of length 'generations' (here 10)
+    N <- rep(NA, generations) #creates a vector of NA (*10?)
+    
+    N[1] <- N0
+    for (t in 2:generations) {
+        N[t] <- N[t-1] * exp(r)
+        browser()
+    }
+    return (N)
+}
+
+plot (Exponential(), type = "l", main = "Exponential growth")
+
+
+**********************************************************************
+
+Testing browse.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+Called from: Exponential()
+debug: N[t] <- N[t - 1] * exp(r)
+debug: browser()
+debug: N[t] <- N[t - 1] * exp(r)
+debug: browser()
+debug: N[t] <- N[t - 1] * exp(r)
+debug: browser()
+debug: N[t] <- N[t - 1] * exp(r)
+debug: browser()
+debug: N[t] <- N[t - 1] * exp(r)
+debug: browser()
+debug: N[t] <- N[t - 1] * exp(r)
+debug: browser()
+debug: N[t] <- N[t - 1] * exp(r)
+debug: browser()
+debug: N[t] <- N[t - 1] * exp(r)
+debug: browser()
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.11521s
+
+======================================================================
+Inspecting script file preallocate.R...
+
+File contents are:
+
+**********************************************************************
+### pre-allocation
+
+NoPreallocFun <- function(x) {
+    a <- vector() #empty vector
+    for (i in 1:x) {
+        a <- c(a,i)
+        #print(a)
+        #print(object.size(a))
+    }
+}
+
+system.time(NoPreallocFun(10000))
+
+
+PreallocFun <- function(x) {
+    a <- rep(NA, x) #pre-allocated vector- repeats NA x times?
+    for (i in 1:x) {
+        a[i] <- i #assign
+        #print(a)
+        #print(object.size(a))
+    }
+}
+
+system.time(PreallocFun(10000))
+
+
+**********************************************************************
+
+Testing preallocate.R...
+
+Output (only first 500 characters): 
+
+
+**********************************************************************
+   user  system elapsed 
+  0.052   0.014   0.066 
+   user  system elapsed 
+  0.002   0.000   0.003 
+
+**********************************************************************
+
+Code ran without errors
+
+Time consumed = 0.21050s
+
+======================================================================
+======================================================================
+Finished running scripts
+
+Ran into 6 errors
+
+======================================================================
+======================================================================
+
+FINISHED LOGGING
+
