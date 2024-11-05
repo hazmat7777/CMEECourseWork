@@ -3,8 +3,7 @@ My CMEE Coursework Repository
     Brief description: 
         week 1 coursework for CMEE MSc 2024-5
 
-    Languages: 
-        plain text
+    Languages:
         shell script
 
     Dependencies:
