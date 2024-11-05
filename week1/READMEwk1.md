@@ -1,22 +1,19 @@
-My CMEE Coursework Repository
+# My CMEE Coursework Repository
 
-    Brief description: 
-        week 1 coursework for CMEE MSc 2024-5
+### Brief description: 
+Week 1 coursework for CMEE MSc 2024-5.
 
-    Languages:
-        shell script
+### Languages:
+- Shell script
 
-    Dependencies:
-        none
+### Dependencies and Installation:
+N/A  
 
-    Installation:
-        N/A  
+### Project structure and Usage: 
+#### Code
+#### data
+#### results
 
-    Project structure and Usage: 
-        code
-        data
-        results
-
-    Author name and contact
-        Harry Trevelyan
-        hjt24@ic.ac.uk
+### Author name and contact
+Harry Trevelyan
+hjt24@ic.ac.uk

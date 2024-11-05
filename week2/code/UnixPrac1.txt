@@ -1,4 +1,4 @@
-#directory: /home/harry/Documents/CMEECourseWork/week2/code
+# First UNIX practical. Paste the following code into terminal.
 
 ##1
 
