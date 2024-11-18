@@ -32,7 +32,7 @@ Week 3 coursework for CMEE MSc 2024-5.
 - **DataWrang.R**: Wrangles the PoundHill dataset.
 - **Girko.R**: Visualizes eigenvalues of a random matrix, illustrating Girko's Circular Law.
 - **MyBars.R**: Creates a bar chart from `Results.txt` and saves as PDF.
-- **MyFirstJupyterNB.ipynb**: Jupyter Notebook with plots using `p.plot` and `qplot`.
+- **MyFirstJupyterNB.ipynb**: Jupyter Notebook showing simple functionalities.
 - **next.R**: `For` loop illustrating the use of `next`.
 - **oaks_debugme.py**: Identifies *Quercus* species from a CSV and saves as CSV.
 - **plotLin.R**: Creates a linear regression plot and saves as PDF.
@@ -40,7 +40,7 @@ Week 3 coursework for CMEE MSc 2024-5.
 - **preallocate.R**: Compares functions with and without vector preallocation.
 - **R_conditionals.R**: Contains three functions using conditionals to check number properties.
 - **sample.R**: Computes the mean of random samples, comparing looped and vectorized sampling.
-- **TestR.py**: Runs an R script (`Test.R`) using `subprocess`, redirects output and errors.
+- **TestR.py**: Runs an R script (`TestR.R`) using `subprocess`, redirects output and errors.
 - **TestR.R**: Prints "Hello, this is R!"
 - **TreeHeight.R**: Calculates tree heights from base distance and top angle.
 - **try.R**: Simulates sampling from a population, calculating the mean if 30 or more unique samples are obtained.
