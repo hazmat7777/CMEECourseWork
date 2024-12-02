@@ -8,10 +8,9 @@ rm(list=ls())
 source("Demographic.R")
 
 # find the job number
-iter <- as.numeric(Sys.getenv(“PBS_ARRAY_INDEX”)) # each task gets a unique number
+iter <- as.numeric(Sys.getenv("PBS_ARRAY_INDEX")) # each task gets a unique number
     # I will set this as 1-100 when I run the cluster:
         # qsub -j 1-100
-
 
 # give all runs a unique seed
 set.seed(iter)
@@ -36,10 +35,10 @@ reproduction_matrix <- matrix(c(0.0, 0.0, 0.0, 2.6,
 clutch_distribution <- c(0.06,0.08,0.13,0.15,0.16,0.18,0.15,0.06,0.03)
 
 # making a list to contain results
-results <- vector("list", 2) # preallocate a results list
+results <- vector("list", 150) # preallocate a results list
 
-# run the simulation 2 times
-for(i in 1:2){
+# run the simulation 150 times
+for(i in 1:150){
     if(iter <= 25){
         results[[i]] <- stochastic_simulation(large_pop_adults, growth_matrix,
         reproduction_matrix, clutch_distribution,

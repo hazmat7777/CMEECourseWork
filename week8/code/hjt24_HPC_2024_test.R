@@ -90,7 +90,7 @@ sum_vect <- function(x, y) {
 
 sum_vect(c(1,0,1,1,2,3), c(1,2,3,4))
 
-
+source("Demographic.R")
 # question 2
 question_2 <- function(){
     # setting parameters for simulation
@@ -123,7 +123,7 @@ question_2 <- function(){
     lines(s_sim_2, col = "blue")
     legend("topleft", legend = c("Starting population all adults",
         "Starting population with spread of ages"),
-        col = c("red", "blue"), lty = 1, lwd = 2)
+        col = c("red", "blue"), lty = 1, lwd = 2, bty = "n")
     dev.off()
     Sys.sleep(0.1)
     
@@ -177,3 +177,56 @@ multinomial <- function(pool, probs) {
   x = as.vector(rmultinom(n=11, pool, probd)) # sample
   return(x[1:length(probs)])
 }
+
+# Question 5
+question_5 <- function(){
+  
+  # define a function which returns TRUE if a pop went extinct
+  isextinct <- function(x) {
+    x[121] == 0 # checks if the pop size at last time step is 0
+  }
+
+  # countextinctions from file list
+  countextinctionsfromfile<- function(filelist){
+    extinctioncount <- 0
+    for(i in filelist) {
+      load(paste0("../results/output_", i, ".rda"))
+      extinctioncount <- extinctioncount + sum(sapply(results, isextinct))
+      }
+    return(extinctioncount)
+  }
+
+  # iterate through files counting extinctions
+  large_adult_extinctions <- countextinctionsfromfile(1:25)
+  small_adult_extinctions <- countextinctionsfromfile(26:50)
+  large_spread_extinctions <- countextinctionsfromfile(51:75)
+  small_spread_extinctions <- countextinctionsfromfile(76:100)
+
+  # convert extinction count to proportion of extinctions
+  l_a_extinct_prob <- large_adult_extinctions/ (15000/4)
+  s_a_extinct_prob <- small_adult_extinctions/ (15000/4)
+  l_s_extinct_prob <- large_spread_extinctions/ (15000/4)
+  s_s_extinct_prob <- small_spread_extinctions/ (15000/4)
+
+  # collate results
+  data <- c(l_a_extinct_prob, s_a_extinct_prob, l_s_extinct_prob, s_s_extinct_prob)
+  
+  # plot a graph of results
+  png(filename="question_5", width = 600, height = 400)
+  barplot(data,
+        names.arg = c("\nLarge adult\npopulation",
+                      "\nSmall adult\n population", 
+                      "\nLarge mixed-age\n population",
+                      "\nSmall mixed-age\n population"),
+        col = "blue",
+        main = "Impact of Population Structure on Extinction Probability",
+        ylab = "Proportion of simulations which ended in extinction",
+        ylim = c(0,0.2)) 
+  Sys.sleep(0.1)
+  dev.off()
+  
+  return("type your written answer here")
+}
+question_5()
+
+list.files("../results", pattern = "^output_.*", full.names = TRUE)
