@@ -10,7 +10,7 @@ Demonstrates usage of basic UNIX command-line and shell scripts.
 - ImageMagick
 
 ### Installation
--sudo apt-get install imagemagick
+- sudo apt-get install imagemagick
 
 ### Project structure and Usage
 #### Code
