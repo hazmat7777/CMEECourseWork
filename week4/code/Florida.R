@@ -14,7 +14,7 @@ plot(ats)
 # finding correlation coefficient
 ?cor # use pearson as data look linear
 observed_corr <- cor(ats$Year, ats$Temp, method = "pearson") 
-print(observed_corr)
+print(paste("Observed correlation is", observed_corr))
 cor.test(ats$Year, ats$Temp, method = "pearson") # invalid p value!
     # cor.test() provides a p-value assuming independent observations,
     # which is not valid here due to autocorrelation in time series.
@@ -31,19 +31,18 @@ shuffle_and_find_cor <- function(year, temp){
     return(correlation)
 }
 
-# find 1000 random correlation coefficients
-random_corrs <- replicate(10000, shuffle_and_find_cor(ats$Year, ats$Temp))
+# find 10000 random correlation coefficients
+n <- 10000
+random_corrs <- replicate(n, shuffle_and_find_cor(ats$Year, ats$Temp))
 
 # counting the correlation coefficients which exceed the observed correlation
-sum(random_corrs >= observed_corr)
+print(paste("Out of", n, "random correlations", sum(random_corrs >= observed_corr), "were greater than the observed correlation."))
 
 #finding the fraction of correlation coeffiecients greater than observed
 approx_p_value <- sum(random_corrs > observed_corr)/length(random_corrs)
-print(approx_p_value)
+print(paste("The approximate p value is", approx_p_value))
 
 ####################
-
-range(random_corrs)
 
 # presenting results
 library(ggplot2)
@@ -53,7 +52,6 @@ temp_vs_year <- ggplot(ats, aes(x = Year, y = Temp))+
     geom_smooth(method = "lm", se = FALSE)+
     labs(x="Year", y="Temperature (°C)") +
     theme_classic()
-temp_vs_year
 
 random_corr_hist <- ggplot(as.data.frame(random_corrs), aes(x=random_corrs)) +
     geom_histogram(colour="white", fill="dodgerblue") +
@@ -78,6 +76,8 @@ plots <- plot_grid(temp_vs_year, random_corr_hist, nrow=1, labels = c("A", "B"))
 pdf(paper = "a4r", width = 0, height = 0,"../results/Florida_plots.pdf")
 print(plots)
 graphics.off()
+
+print("Results were saved to ../results/Florida_Plots.pdf")
 
 
 
