@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""Description of this program or application.
-You can use several lines"""
+"""Defining and testing various mathematical functions"""
 
 __appname__ = 'maths functions'
 __author__ = 'Harry'

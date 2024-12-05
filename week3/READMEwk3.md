@@ -8,14 +8,22 @@ R scripts demonstrating key functionalities.
 - Python 3.12.3
 
 ### Dependencies and Installation
+- **ggthemes**  
+  R installation:  
+  `install.packages("ggthemes")`  
+
 - **Jupyter**  
   Python installation:  
-  `pip install jupyter`
+  `pip install jupyter`  
+
+- **reshape2**  
+  R installation:  
+  `install.packages("reshape2")`  
 
 - **tidyverse**  
   R installation:  
   `install.packages("tidyverse")`
-  
+
 ### Project structure and Usage:
 
 #### Code:  
@@ -92,6 +100,8 @@ Input files for various scripts within the code directory.
 - **PoundhillData.csv**: Species counts under different cultivation treatments- see *PoundHillMetaData.csv*.
 
 - **PoundHillMetaData.csv**: Metadata for the above.
+
+- **Results.txt**: Bar graph data.
 
 - **Trees.csv**: Species, distance, and height information for some trees.
 

@@ -1,4 +1,4 @@
-######## Functions #########
+### Functions
 
 ## A function to take a sample of size n from a pop "popn" and return its mean
 myexperiment <- function(popn, n) {
@@ -51,7 +51,7 @@ sapply_sample <- function(popn, n, num) {
 # return value is a vector or matrix rather than a list
 
 
-### Generating a pop
+### Generating a sample
 
 set.seed(12345)
 popn <- rnorm(10000) # gen the pop
@@ -105,12 +105,13 @@ loopy_sample3 <- function(popn, n, num) {
     for(i in 1:num) {
         result3[[i]] <- myexperiment(popn, n) #in a list you access elements using [[]] double sq brs
     }
+    return(result3)
 }
 
 ## to run "num" iterations of the experiment with lapply:
 lapply_sample <- function(popn, n, num) {
     result4 <- lapply(1:num, function(i) myexperiment(popn, n))
-    result(result4)
+    return(result4)
 }
 
 # lapply applies a fucntion to each element of a list/vector

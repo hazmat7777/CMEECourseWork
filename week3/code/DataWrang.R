@@ -204,7 +204,6 @@ legend('topleft',c('Predators', 'Prey'),
 
 ## Boxplots
 graphics.off()
-dev.off()
 
 boxplot(log10(MyDF$Predator.mass), xlab = "Location", ylab = "Log10(Predator Mass)", main = "Predator mass")
 
@@ -382,7 +381,6 @@ dev.off() # closes the pdf device, finalising and saving the file
 ## the geom argument
 
 # specifies the objects that define the graph type
-dev.off()
 
 #load the data
 MyDF <- as.data.frame(read.csv("../data/EcolArchives-E089-51-D1.csv"))
@@ -500,7 +498,6 @@ p <- ggplot(MyDF, aes(x = log(Prey.mass),
 p
 
 ### Useful ggplot examples
-dev.off()
 
 require(reshape2)
 
@@ -639,7 +636,6 @@ p <- p + scale_x_continuous("My x axis",
 p
 
 ### Mathematical display
-dev.off()
 x <- seq(0, 100, by = 0.1)
 y <- -4. + 0.25 * x +
     rnorm(length(x), mean = 0., sd = 2.5) # randos

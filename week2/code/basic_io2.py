@@ -16,8 +16,9 @@ for i in list_to_save:
 f.close()
 
 
-## simplifying using with open()
+## simplifying using with open(), and using a print command
 
 with open('../sandbox/testout2.txt', 'w') as f:
     for i in list_to_save:
         f.write(str(i) + '\n') # add a newline at the end
+print("File written to ../sandbox/testout2.txt.")

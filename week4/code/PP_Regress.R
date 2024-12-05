@@ -63,9 +63,9 @@ results <- MyDF %>%
             
             # Extract coefficients and round to 3dp
             Intercept <- round(lm_summary$coefficients["(Intercept)", "Estimate"], digits = 3)
-            Slope <- round(lm_summary$coefficients["Prey.mass.grams", "Estimate"], digits = 3)
+            Slope <- round(lm_summary$coefficients["log(Prey.mass.grams)", "Estimate"], digits = 3)
             R_squared <- round(lm_summary$r.squared, digits = 3)
-            P_value <- lm_summary$coefficients["Prey.mass.grams", "Pr(>|t|)"]
+            P_value <- lm_summary$coefficients["log(Prey.mass.grams)", "Pr(>|t|)"]
             P_value <- ifelse(
                 P_value < 0.001, 
                 "< 0.001",
@@ -99,3 +99,4 @@ view(results)
 
 # write the results to a csv file
 write.csv(results, "../results/PP_Regress_Results.csv", row.names = TRUE)
+print("Results written to ../results/PP_Regress_Results.csv")

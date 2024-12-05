@@ -1,3 +1,5 @@
+## testing the execution speed with vectorisation
+
 M <- matrix(runif(1000000), 1000,1000) #takes 1mil randos (from 0-1) and organises into a matrix w 1000 rows and cols
 
 SumAllElements <- function(M) {

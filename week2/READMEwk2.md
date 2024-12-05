@@ -68,7 +68,7 @@ Python scripts introducing key functionalities.
   `python3 scope.py`
 
 - **sysargv.py**: Demonstrates sys module by printing script name and command-line arguments.  
-  `python3 sysargv.py`
+  `python3 sysargv.py argument1 argument2 argument3 [...]`
 
 - **test_control_flow.py**: Contains functions for checking even or odd numbers, including embedded doctests for testing.  
   `python3 test_control_flow.py`
