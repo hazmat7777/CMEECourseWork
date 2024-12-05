@@ -17,7 +17,8 @@ loopy_sample1 <- function(popn, n, num) { #num is how many means you need to cal
 
 ## to run "num" iterations of the mean using a FOR loop on a vector with preallocation
 loopy_sample2 <- function(popn, n, num) {
-    result2 <- vector(,num) #preallocate expected size # first arg is empty so defaults to numeric # length is num
+    result2 <- vector(,num) #preallocate expected size # first arg is empty so defaults to numeric 
+    # length is num
     for(i in 1:num) {
         result2[i] <- myexperiment(popn, n) #remember this takes the mean of a sample
     }
@@ -141,9 +142,11 @@ print(system.time(loopy_sample2(popn, n, num)))
 
 print("Using loops with preallocation on a list took:" )
 print(system.time(loopy_sample3(popn, n, num)))
+    # preallocation increases execution speed
 
 print("Using the vectorized sapply function (on a list) took:" )
 print(system.time(sapply_sample(popn, n, num)))
 
 print("Using the vectorized lapply function (on a list) took:" )
 print(system.time(lapply_sample(popn, n, num)))
+    # vectorization increases execution speed

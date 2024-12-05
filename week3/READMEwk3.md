@@ -1,7 +1,7 @@
 # My CMEE Coursework Repository
 
 ### Brief Description
-Week 3 coursework for CMEE MSc 2024-5.
+R scripts demonstrating key functionalities.
 
 ### Languages
 - R
@@ -23,7 +23,7 @@ Week 3 coursework for CMEE MSc 2024-5.
 #### Code: 
 - **align_seqs.py**: Aligns two FASTA files, computes the best alignment score, and displays the best alignment.
 - **apply1.R**: Calculates statistics on a random matrix.
-- **apply2.R**: Defines and applies a function to a matrix.
+- **apply2.R**: Defines a function and applies it to a matrix.
 - **basic_io.R**: Reads and writes CSV files.
 - **boilerplate.R**: Function combining two arguments and returning a vector.
 - **break.R**: Demonstrates breaking out of a `WHILE` loop.
@@ -42,7 +42,6 @@ Week 3 coursework for CMEE MSc 2024-5.
 - **sample.R**: Computes the mean of random samples, comparing looped and vectorized sampling.
 - **TestR.py**: Runs an R script (`TestR.R`) using `subprocess`, redirects output and errors.
 - **TestR.R**: Prints "Hello, this is R!"
-- **TreeHeight.R**: Calculates tree heights from base distance and top angle.
 - **try.R**: Simulates sampling from a population, calculating the mean if 30 or more unique samples are obtained.
 - **Vectorize1.R**: Demonstrates the higher computational speed of using vectorization versus nested loops with big data.
 #### Data

@@ -10,7 +10,6 @@ import csv  # CSV module for file operations
 import sys  # Sys module for command line arguments
 import doctest  # Doctest for running tests
 
-
 ### Functions ###
 def is_an_oak(name):
     """ Returns True if name starts with 'quercus' 
@@ -28,8 +27,8 @@ def is_an_oak(name):
     False
     """
     # Check if the first word matches 'quercus'
-    return name.lower() == "quercus"
-    
+    first_word = name.lower().split()[0]  # Split the name and check the first word
+    return first_word == "quercus"
     
 def main(argv): 
     """ Main entry point of the program"""
@@ -47,7 +46,7 @@ def main(argv):
                 csvwrite.writerow([row[0], row[1]])
             else:
                 print('Not an oak.\n')    
-
+    print(f"Results saved to: {g.name}")
     return 0
 
 if (__name__ == "__main__"): #Ensures main function runs when called from command line

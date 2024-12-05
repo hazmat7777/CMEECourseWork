@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
+
 """Script demonstrating how to write to another file."""
+
 #############################
 # FILE OUTPUT
 #############################

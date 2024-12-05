@@ -1,6 +1,6 @@
 #!/bin/sh
 
-## illustrates he use of variables
+### illustrates variable assignment and special variables
 
 ## special variables
 
@@ -21,11 +21,14 @@ echo 'the current value of the variable is:' $MY_VAR
 echo
 
 #Reading (multiple values) from user input:
-echo 'Enter two numbers separated by space(s)'
+echo 'Enter two integers separated by space(s)'
 read a b
 echo
-echo 'you entered' $a 'and' $b '; Their sum is:'
 
-#Command substitution
-MY_SUM=$(expr $a + $b)
-echo $MY_SUM
+if ! ((a)) 2>/dev/null || ! ((b)) 2>/dev/null; then # check if input is numeric
+    echo "Please enter two integers."
+else
+    echo 'you entered' $a 'and' $b '; Their sum is:'
+    MY_SUM=$((a + b))
+    echo $MY_SUM
+fi

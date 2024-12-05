@@ -1,4 +1,4 @@
-#directory: /home/harry/Documents/CMEECourseWork/week2/code
+# First UNIX practical. Paste the following code into terminal.
 
 ##1
 
@@ -39,7 +39,7 @@
 
     #result=$(( $(grep -o -e 'A' -e 'T' ../data/fasta/E.coli.fasta | wc -l) / $(grep -o -e 'G' -e 'C' ../data/fasta/E.coli.fasta | wc -l) )); echo "$result"
 
-#final- to show decimal place (as bash uses integers)
+#final- combining the above into one line, and using bc to display decimal places (as bash uses integers)
     #need to use basic calculator bc
     #use echo to send output to bc
     #scale is a modifier setting dp

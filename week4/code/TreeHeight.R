@@ -26,13 +26,12 @@ TreeHeight <- function(degrees, distance) {
     return (height)
 }
 
+# example use of function
 TreeHeight(37, 40) # test the function works
 
 # adding treeheight as a new column
 TreeData$Tree.Height.m <- mapply(FUN = TreeHeight, # multiple apply
     degrees = TreeData[,3], distance = TreeData[,2])
-
-str(TreeData)
 
 # writing output file to results
 write.csv(TreeData, "../results/TreeHts.csv")

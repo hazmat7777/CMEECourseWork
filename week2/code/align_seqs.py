@@ -4,23 +4,36 @@
 
 ## imports
 import csv
+import os
 
 ## functions
-
 def read_sequences(input_path):
-    """Reads csv FASTA files."""
+    """Reads sequences from a CSV file."""
+    
     if not input_path.endswith('.csv'):
         raise ValueError("The input file must be a CSV file.")
+    
+    # Check if the file exists before trying to open it
+    if not os.path.isfile(input_path):
+        raise FileNotFoundError(f"Error: The file {input_path} was not found.")
+    
     try:
         with open(input_path, 'r') as file:
             reader = csv.reader(file)
-            seqs = [item for row in reader for item in row]
+            seqs = [item for row in reader for item in row]  # Flattening the sequence list
+
+            # Debugging print statement to confirm sequences are read
+            print(f"Sequences read: {seqs}")
+            
+            # Check if at least two sequences are read
             if len(seqs) < 2:
                 raise ValueError("The input CSV must contain at least two sequences.")
+            
             return seqs
-    except FileNotFoundError:
-        print(f"Error: The file {input_path} was not found.")
-        exit(1)
+            
+    except Exception as e:
+        print(f"Error reading the file: {e}")
+        exit(1)  # Exit in case of any other error
 
 def make_s1_longest(seq1, seq2):
     """Assigns the longer sequence s1, and the shorter to s2"""
@@ -59,21 +72,28 @@ def find_best_alignment(s1, s2, l1, l2):
             my_best_matched = "." * i + matched  # Store the matched string
             my_best_align = "." * i + s2  # Adding 'i' many dots to align the sequences
             my_best_score = score
-    return my_best_align, my_best_score
+    return my_best_align, my_best_score, my_best_matched
 
-def main(input_path= "../sandbox/seqs_to_align.csv", output_file = "../results/best_alignment.txt"):
+def main(input_path="../data/fasta/seqs_to_align.csv", output_file="../results/best_alignment.txt"):
     """Reads sequences from a csv, finds the best alignment, and writes the result to a text file."""
+    print(f"Starting alignment with input file: {input_path}")
     seqs = read_sequences(input_path)
     seq1 = seqs[0]
     seq2 = seqs[1]
+    print(f"Sequences to align: {seq1}, {seq2}")  # Debug print
     s1, s2 = make_s1_longest(seq1, seq2)
     l1 = len(s1)
     l2 = len(s2)
-    my_best_align, my_best_score = find_best_alignment(s1, s2, l1, l2)
+    my_best_align, my_best_score, my_best_matched = find_best_alignment(s1, s2, l1, l2)
+    
+    print(f"Best score: {my_best_score}")  # Debug print
+    
     with open(output_file, 'w') as f:
-        f.write(my_best_align + '\n') # Note that you just take the last alignment with the highest score
+        f.write(my_best_align + '\n')  # Note that you just take the last alignment with the highest score
+        f.write(my_best_matched + '\n')
         f.write(s1 + '\n')
         f.write(f"Best score: {my_best_score}\n")
+    print(f"Alignment results saved to: {output_file}")  # Debug print
     
 if __name__ == "__main__":
     main()
