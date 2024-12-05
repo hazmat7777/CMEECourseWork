@@ -21,8 +21,8 @@ R installation:
 - **Florida.R**: Calculates the correlation between temperature and year in Florida, including an estimated p-value.  
 `source("Florida.R")`
 
-- **Florida.tex**: A LaTeX script which compiles *Florida.pdf* when run in bash as below:  
-`pdflatex Florida && rm *.aux *.out *.log`
+- **Florida.tex**: A LaTeX script which compiles *Florida.pdf* when run in bash as below. Note that the PDF will not render correctly until *Florida.R* has been sourced as above, as *Florida.tex* contains a plot which is output by *Florida.R*.  
+  `pdflatex Florida && rm *.aux *.out *.log`
 
 - **Florida.pdf**: Summarises the results found in *Florida.R*.  
 

@@ -3,7 +3,6 @@
 **/sandbox/
 **/results/*
 !**/results/.gitkeep
-!**/results/Florida_plots.pdf
 *.exe
 *.o
 *.class
