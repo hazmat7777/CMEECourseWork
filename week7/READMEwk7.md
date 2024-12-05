@@ -10,10 +10,10 @@ Statistics in R assessment: designing and running a linear model.
 
 - **tidyverse**
 R installation:
-`install.packages("tidyverse")`
--**sjPlot**
-R installation:
-`install.packages("sjPlot")`
+`install.packages("tidyverse")`  
+- **sjPlot**  
+R installation:  
+`install.packages("sjPlot")`  
   
 ### Project structure and Usage:
 
