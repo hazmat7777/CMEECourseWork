@@ -7,12 +7,14 @@ Demonstrates usage of basic UNIX command-line and shell scripts.
 - Shell script
 
 ### Dependencies and Installation
-- ImageMagick
-`sudo apt-get install imagemagick`
-- TeX Live
-`sudo apt-get install texlive`
-- Evince
-`sudo apt-get install evince`
+- ImageMagick  
+  `sudo apt-get install imagemagick`
+
+- TeX Live  
+  `sudo apt-get install texlive`
+
+- Evince  
+  `sudo apt-get install evince`
 
 ### Project structure and Usage
 #### Code
@@ -31,12 +33,13 @@ Demonstrates usage of basic UNIX command-line and shell scripts.
 - **csvtospace.sh**: Converts one csv file to ssv format.  
   `bash csvtospace.sh`
 
-- **FirstBiblio.bib**: BibTeX citation for Verhulst 1838.  
+- **FirstBiblio.bib**: BibTeX citation for Verhulst 1838.
 
-- **FirstExample.pdf**: PDF output of FirstExample.tex.  
+- **FirstExample.pdf**: PDF output of FirstExample.tex.
 
 - **FirstExample.tex**: Simple LaTeX file demonstrating mathematical formulae and citations.  
-  `bash CompileLaTeX.sh` (to compile the LaTeX file to a PDF)
+  `bash CompileLaTeX.sh`  
+  (to compile the LaTeX file to a PDF)
 
 - **MyExampleScript.sh**: Basic shell script demonstrating variable assignment and the $USER special variable.  
   `bash MyExampleScript.sh`
@@ -63,5 +66,5 @@ Demonstrates usage of basic UNIX command-line and shell scripts.
 To store files outputted from the code directory.
 
 ### Author name and contact
-Harry Trevelyan
+Harry Trevelyan  
 hjt24@ic.ac.uk
