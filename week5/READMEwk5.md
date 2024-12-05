@@ -9,11 +9,11 @@ Statistics in R week 1/2: exploring linear models.
 ### Dependencies and Installation
 
 - **tidyverse**
-  R installation:
-  `install.packages("tidyverse")`
-- **WebPower**
-  R installation:
-  `install.packages("WebPower")`
+  R installation:  
+  `install.packages("tidyverse")`  
+- **WebPower**  
+  R installation:  
+  `install.packages("WebPower")`  
   
 ### Project structure and Usage:
 
