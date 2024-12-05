@@ -38,8 +38,8 @@ Demonstrates usage of basic UNIX command-line and shell scripts.
 - **FirstExample.pdf**: PDF output of FirstExample.tex.
 
 - **FirstExample.tex**: Simple LaTeX file demonstrating mathematical formulae and citations.  
+To compile to a PDF:  
   `bash CompileLaTeX.sh`  
-  (to compile the LaTeX file to a PDF)
 
 - **MyExampleScript.sh**: Basic shell script demonstrating variable assignment and the $USER special variable.  
   `bash MyExampleScript.sh`

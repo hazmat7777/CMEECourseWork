@@ -8,12 +8,13 @@ R scripts demonstrating key functionalities.
 - Python 3.12.3
 
 ### Dependencies and Installation
-- **Jupyter**
-Python installation:
-`pip install jupyter`
-- **tidyverse**
-R installation:
-`install.packages("tidyverse")`
+- **Jupyter**  
+  Python installation:  
+  `pip install jupyter`
+
+- **tidyverse**  
+  R installation:  
+  `install.packages("tidyverse")`
   
 ### Project structure and Usage:
 
@@ -90,13 +91,13 @@ Input files for various scripts within the code directory.
 
 - **PoundhillData.csv**: Species counts under different cultivation treatments- see *PoundHillMetaData.csv*.
 
-- **PoundHillMetaData.csv**: metadata for the above.
+- **PoundHillMetaData.csv**: Metadata for the above.
 
-- **Trees.csv**: species, distance and height information for some trees.
+- **Trees.csv**: Species, distance, and height information for some trees.
 
 #### Results
 To store files outputted from the code directory.
 
 ### Author name and contact
-Harry Trevelyan
+Harry Trevelyan  
 hjt24@ic.ac.uk

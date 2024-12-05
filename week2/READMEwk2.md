@@ -8,8 +8,8 @@ Python scripts introducing key functionalities.
 - Python
 
 ### Dependencies and installation
-- **ipdb** (Python)
-`pip install ipdb`
+- **ipdb** (Python)  
+  `pip install ipdb`
 
 ### Project Structure and Usage
 #### Code

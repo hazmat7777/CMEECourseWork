@@ -1,10 +1,10 @@
 # Week 9
 
 ### Brief Description
-Two practical exercises using the Geographic Information System (GIS) framework.
+Two practical exercises using the Geographic Information System (GIS) framework.  
 
 ### Languages
-- R 4.3.3
+- R 4.3.3  
 
 ### Dependencies and Installation
 

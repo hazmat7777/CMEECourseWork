@@ -8,9 +8,9 @@ High Performance Computing exercises.
 
 ### Dependencies and Installation
 
-- **tidyverse**
-R installation:
-`install.packages("tidyverse")`
+- **tidyverse**  
+  R installation:  
+  `install.packages("tidyverse")`
   
 ### Project structure and Usage:
 
@@ -19,8 +19,8 @@ Scripts, their descriptions, and how to run them in a terminal.
 
 - **Demographic.R**: contains functions to initialise populations and run deterministic/stochastic simulations on them.
 
-- **hjt24_HPC_2024_demographic_cluster.R**: runs a stochastic demographic model for different initial population conditions across 100 parallel cluster tasks.
-Submit the job to the cluster using the provided shell script:
+- **hjt24_HPC_2024_demographic_cluster.R**: runs a stochastic demographic model for different initial population conditions across 100 parallel cluster tasks.  
+  Submit the job to the cluster using the provided shell script:  
   `qsub -J 1-100 run_script.sh`
 
 - **hjt24_HPC_2024_main.R**: Runs a stochastic demographic model and neutral theory simulation.
@@ -35,5 +35,5 @@ Submit the job to the cluster using the provided shell script:
 To store files outputted from the code directory.
 
 ### Author name and contact
-Harry Trevelyan
+Harry Trevelyan  
 hjt24@ic.ac.uk
