@@ -8,8 +8,8 @@ Statistics in R assessment: designing and running a linear model.
 
 ### Dependencies and Installation
 
-- **tidyverse**
-R installation:  
+- **tidyverse**  
+  R installation:  
 `install.packages("tidyverse")`  
 - **sjPlot**  
 R installation:  
