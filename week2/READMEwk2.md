@@ -1,4 +1,4 @@
-# My CMEE Coursework Repository
+# Week 2
 
 ### Brief Description
 Python scripts introducing key functionalities.

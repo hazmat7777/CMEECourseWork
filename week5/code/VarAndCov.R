@@ -25,7 +25,6 @@ abline(h=0)
 
 # now draw the squares of differences to illustrate
 #?polygon()
-dev.off()
 par(mfrow = c(1,3))
 plot(x, y1, xlim=c(-12,12), ylim=c(-12,12) ,pch=19, cex=0.8, col="red")
 abline(v=0)

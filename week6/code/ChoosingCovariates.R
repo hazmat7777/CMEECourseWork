@@ -138,12 +138,3 @@ abline(a = 4.0106 + 1.7702, b = (0.8864), col = "red") # glizz line
 
 #############################################################################
 
-# interactions
-
-rm(list = ls())
-
-dat<- read.table("../data/data.txt", header = TRUE)
-head(dat)
-str(dat)
-
-dat$method <- as.factor(dat$method)

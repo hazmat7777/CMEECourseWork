@@ -1,5 +1,3 @@
-cowplot
-
 # My CMEE Coursework Repository
 
 ### Brief Description

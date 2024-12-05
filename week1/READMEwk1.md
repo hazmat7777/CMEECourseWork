@@ -1,4 +1,4 @@
-# My CMEE Coursework Repository
+# Week 1
 
 ### Brief description
 Demonstrates usage of basic UNIX command-line and shell scripts.

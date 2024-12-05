@@ -1,4 +1,4 @@
-# My CMEE Coursework Repository
+# Week 3
 
 ### Brief Description
 R scripts demonstrating key functionalities.
