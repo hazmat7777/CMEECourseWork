@@ -1,4 +1,5 @@
 *~ 
+
 *.tmp
 **/sandbox/
 **/results/*
@@ -9,3 +10,4 @@
 *~
 .*.swp
 __pycache__/
+week10/data/MAMMALS

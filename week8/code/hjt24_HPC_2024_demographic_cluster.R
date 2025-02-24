@@ -59,6 +59,6 @@ for(i in 1:150){
 }
 
 # save each output with a unique filename
-save(results, file=paste0("output_",iter, ".rda"))
+save(results, file=paste0("../results/rda_files/output_",iter, ".rda"))
 
 

@@ -657,6 +657,9 @@ uk_eire_capitals$elev <- extract(uk_eire_elev, uk_eire_capitals, ID=FALSE)
 print(uk_eire_capitals)
     # elev values in etopo_uk, idk why
 
+    class(uk_eire_capitals)
+    class(uk_eire_elev)
+
 # with polygons
 etopo_by_country <- extract(uk_eire_elev, uk_eire_sf['name']) # returns df of all the elevs in each country
 head(etopo_by_country)
