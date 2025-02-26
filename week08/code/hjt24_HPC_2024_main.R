@@ -126,7 +126,7 @@ question_5 <- function(){ # bar graph of proportion of extinctions
   countextinctionsfromfile<- function(filelist){
     extinctioncount <- 0
     for(i in filelist) {
-      load(paste0("../results/rda_files/output_", i, ".rda"))
+      load(paste0("../results/demographic_output/output_", i, ".rda"))
       extinctioncount <- extinctioncount + sum(sapply(results, isextinct))
       }
     return(extinctioncount)
@@ -169,7 +169,7 @@ question_6 <- function(){ # graph deviation of stochastic vs deterministic model
   
   # Stochastic sim: find population trend = mean at each timestep
   poptrendfromfilelist <- function(filelist) {
-    file_paths <- paste0("../results/rda_files/output_", filelist, ".rda")
+    file_paths <- paste0("../results/demographic_output/output_", filelist, ".rda")
     
     # Initialize sum and count vectors
     total_sum <- numeric(121)  # 121 zeroes
@@ -375,7 +375,7 @@ neutral_generation_speciation <- function(community,speciation_rate)  {
 neutral_time_series_speciation <- function(community,speciation_rate,duration)  {
   
   # keep track of species richness
-  richness <- numeric(duration+1) # initialise vector
+  richness <- numeric(duration+1) # initialise richness vector
   richness[1] <- species_richness(community) # starting richness
 
   # simulate neutral generations with speciation
@@ -424,8 +424,19 @@ species_abundance <- function(community)  {
 
 # Question 20
 octaves <- function(abundance_vector) {
+  if (length(abundance_vector) == 0) {
+    return(numeric(0))  # Return an empty vector if no data
+  }
   
+  # Compute octave index for each abundance
+  octave_indices <- floor(log2(abundance_vector)) + 1 # the octave bin which each abundance which would fall into
+  
+  # Tabulate counts per octave bin
+  octave_counts <- tabulate(octave_indices)
+  
+  return(octave_counts)
 }
+
 
 # Question 21
 sum_vect <- function(x, y) {
@@ -442,21 +453,108 @@ sum_vect <- function(x, y) {
     return(result)
 }
 
+
 # Question 22
 question_22 <- function() {
+
+  # run 200 generations to 'burn in'
+  community_max <- Reduce(function(comm, .) neutral_generation_speciation(comm, speciation_rate = 0.1),
+                        x = seq_len(200),
+                        init = init_community_max(100))
+  community_min <- Reduce(function(comm, .) neutral_generation_speciation(comm, speciation_rate = 0.1),
+                        x = seq_len(200),
+                        init = init_community_min(100))
+
+  # keep track of octaves
+  max_octaves_sum <- octaves(species_abundance(community_max))
+  min_octaves_sum <- octaves(species_abundance(community_min))
+
+  # run simulation, calculating and summing the octaves every 20 generations
+  for(i in 1:2000){
+    community_max <- neutral_generation_speciation(community_max, speciation_rate = 0.1)
+    community_min <- neutral_generation_speciation(community_min, speciation_rate = 0.1)
+    
+    if(i %% 20 == 0){
+      max_octaves_sum <- sum_vect(max_octaves_sum, octaves(species_abundance(community_max)))
+      min_octaves_sum <- sum_vect(min_octaves_sum, octaves(species_abundance(community_min)))
+
+    }
+  }
+
+  max_octaves_mean <- max_octaves_sum/100
+  min_octaves_mean <- min_octaves_sum/100
+
+  # graph
+  png(filename="../results/question_22", width = 600, height = 400)
   
-  png(filename="question_22", width = 600, height = 400)
-  # plot your graph here
+  par(mfrow = c(1,2), oma = c(0, 0, 3, 0))  # Increase top margin for mtext()
+  
+  # Bar plot for Max Initial Richness
+  barplot(max_octaves_mean, col = "blue", names.arg = c(1,2,3,4,5,6), 
+          main = "High Initial Richness",
+          xlab = "Octave Class", ylab = "Number of Species",
+          ylim = c(0,12))
+
+  # Bar plot for Min Initial Richness
+  barplot(min_octaves_mean, col = "red", names.arg = c(1,2,3,4,5,6),
+          main = "Low Initial Richness", 
+          xlab = "Octave Class", ylab = "Number of Species",
+          ylim = c(0,12))
+
+  mtext("Mean Species Abundance Distribution", outer = TRUE)
+
   Sys.sleep(0.1)
   dev.off()
   
-  return("type your written answer here")
+return("The plots indicate that in our simulations, initial species richness does not influence the emergent species abundance distribution. After the 200-generation burn-in period, the system stabilizes. This stable state is characterized by many species with low abundance, likely due to high speciation.")
 }
+
 
 # Question 23
 neutral_cluster_run <- function(speciation_rate, size, wall_time, interval_rich, interval_oct, burn_in_generations, output_file_name) {
     
+  # Initialisation
+  community <- init_community_min(size)
+  time_series <- numeric(burn_in_generations / interval_rich)  # Preallocate for species richness tracking
+  abundance_list <- vector("list")  # List to store octaves
+  i <- 1  # Burn-in counter
+  j <- 1  # Octave tracking counter
+
+  # Start the timer
+  start_time <- proc.time()[3]  
+
+  # Run sim until wall_time is reached
+  while ((proc.time()[3] - start_time) < (wall_time * 60)) {  
+
+    # Perform burn-in first
+    if (i <= burn_in_generations) {
+      if (i %% interval_rich == 0) {
+        time_series[i / interval_rich] <- species_richness(community)
+      }
+      community <- neutral_generation_speciation(community, speciation_rate)
+      i <- i + 1  # Increment burn-in counter
+    } else {
+      # Run normal sim      
+      if (j %% interval_oct == 0) {
+        abundance_list[[j / interval_oct]] <- octaves(species_abundance(community))
+      }
+      community <- neutral_generation_speciation(community, speciation_rate)
+      j <- j + 1  # Increment
+      
+    }
+  }
+
+  # Record total time taken
+  total_time <- proc.time()[3] - start_time
+
+  # Save Output to File
+  save(time_series, abundance_list, community, total_time, 
+       speciation_rate, size, wall_time, interval_rich, interval_oct, burn_in_generations, 
+       file = output_file_name)
+
+  return("Simulation Complete")  # Return a confirmation message
 }
+
 
 # Questions 24 and 25 involve writing code elsewhere to run your simulations on
 # the cluster

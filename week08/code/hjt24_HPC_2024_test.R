@@ -558,3 +558,196 @@ species_abundance <- function(community)  {
   abundances <- table(community) # table of adundances
   return(as.vector(sort(abundances, decreasing = T)))
 }
+
+species_abundance(c(1,5,3,6,5,6,1,1))
+
+tabulate(c(1,2,3,43,45,1,1,1,1,2))
+
+# Question 20
+octaves <- function(abundance_vector) {
+  if (length(abundance_vector) == 0) {
+    return(numeric(0))  # Return an empty vector if no data
+  }
+  
+  # Compute octave index for each abundance
+  octave_indices <- floor(log2(abundance_vector)) + 1 # the octave bin which each abundance which would fall into
+  
+  # Tabulate counts per octave bin
+  octave_counts <- tabulate(octave_indices)
+  
+  return(octave_counts)
+}
+
+
+octaves(c(1,2,3,43,45,1,1,1,1,1,1,1,2))
+
+floor(log(45, base = 2))
+
+
+
+
+
+
+# Question 22
+question_22 <- function() {
+
+  # run 200 generations to 'burn in'
+  community_max <- Reduce(function(comm, .) neutral_generation_speciation(comm, speciation_rate = 0.1),
+                        x = seq_len(200),
+                        init = init_community_max(100))
+  community_min <- Reduce(function(comm, .) neutral_generation_speciation(comm, speciation_rate = 0.1),
+                        x = seq_len(200),
+                        init = init_community_min(100))
+
+  # keep track of octaves
+  max_octaves_sum <- octaves(species_abundance(community_max))
+  min_octaves_sum <- octaves(species_abundance(community_min))
+
+  # run simulation, calculating and summing the octaves every 20 generations
+  for(i in 1:2001){
+    community_max <- neutral_generation_speciation(community_max, speciation_rate = 0.1)
+    community_min <- neutral_generation_speciation(community_min, speciation_rate = 0.1)
+    
+    if(i %% 20 == 1){
+      max_octaves_sum <- sum_vect(max_octaves_sum, octaves(species_abundance(community_max)))
+      min_octaves_sum <- sum_vect(min_octaves_sum, octaves(species_abundance(community_min)))
+
+    }
+  }
+
+  max_octaves_mean <- max_octaves_sum/100
+  min_octaves_mean <- min_octaves_sum/100
+
+  # graph
+  png(filename="../results/question_22", width = 600, height = 400)
+  
+  par(mfrow = c(1,2), oma = c(0, 0, 3, 0))  # Increase top margin for mtext()
+  
+  # Bar plot for Max Initial Richness
+  barplot(max_octaves_mean, col = "blue", names.arg = c(1,2,3,4,5,6), 
+          main = "High Initial Richness",
+          xlab = "Octave Class", ylab = "Number of Species",
+          ylim = c(0,12))
+
+  # Bar plot for Min Initial Richness
+  barplot(min_octaves_mean, col = "red", names.arg = c(1,2,3,4,5,6),
+          main = "Low Initial Richness", 
+          xlab = "Octave Class", ylab = "Number of Species",
+          ylim = c(0,12))
+
+  mtext("Mean Species Abundance Distribution", outer = TRUE)
+
+  Sys.sleep(0.1)
+  dev.off()
+  
+return("The plots indicate that in our simulations, initial species richness does not influence the emergent species abundance distribution. After the 200-generation burn-in period, the system stabilizes, reaching a consistent species abundance distribution. This stable state is characterized by many species with low abundance, likely due to high speciation.")
+}
+
+question_22()
+
+# Question 23
+neutral_cluster_run <- function(speciation_rate, size, wall_time, interval_rich, interval_oct, burn_in_generations, output_file_name) {
+    
+  # initialisation
+  community <- init_community_min(size)
+  time_series <- numeric() # to store richness during burn-in
+  i <- 0
+  j <- 0
+  octave_list <- vector("list")
+
+  # start the clock
+  start_time <- proc.time()[3]  # Record starting time (elapsed CPU time in seconds)
+
+  # continue running the simulation until wall_time (in minutes) is reached
+  while ((proc.time()[3] - start_time) < (wall_time * 60)) { # while elapsed time is below wall_time
+    
+    while(i < burn_in_generations){ # during burn-in generations ; ignored after
+      i <- i + 1
+      community <- neutral_generation_speciation(community, speciation_rate = speciation_rate)
+      if (i %% interval_rich == 0){
+        time_series[i/interval_rich] <- abundance(community)
+      }
+    }
+
+    # now run simulation
+    community <- neutral_generation_speciation(community, speciation_rate)
+    if(j %% interval_oct == 0)
+    octave_list[[(j/interval_oct)+1]]<- octaves(species_abundance(community))
+    j <- j + 1
+  }
+  # Record Total Time Taken
+  total_time <- proc.time()[3] - start_time
+
+  # Save Output to File
+  save(time_series, octave_list, community, total_time, 
+       speciation_rate, size, wall_time, interval_rich, interval_oct, burn_in_generations, 
+       file = output_file_name)
+
+  return("complete")  # Return final community state after time limit is reached
+
+}
+
+
+neutral_cluster_run <- function(speciation_rate = 0.1, size = 100, wall_time = 1, interval_rich = 2, interval_oct = 2, burn_in_generations = 20, output_file_name = "my_test_file1.rda")
+init_community_min(10)
+init_community_max(10)
+
+?proc.time()
+
+0 %% 10
+
+
+neutral_cluster_run <- function(speciation_rate, size, wall_time, interval_rich, interval_oct, burn_in_generations, output_file_name) {
+    
+  # Initialisation
+  community <- init_community_min(size)
+  time_series <- numeric(burn_in_generations / interval_rich)  # Preallocate for species richness tracking
+  abundance_list <- vector("list")  # List to store octaves
+  i <- 1  # Burn-in counter
+  j <- 1  # Octave tracking counter
+
+  # Start the timer
+  start_time <- proc.time()[3]  
+
+  # Run sim until wall_time is reached
+  while ((proc.time()[3] - start_time) < (wall_time * 60)) {  
+
+    # Perform burn-in first
+    if (i <= burn_in_generations) {
+      if (i %% interval_rich == 0) {
+        time_series[i / interval_rich] <- species_richness(community)
+      }
+      community <- neutral_generation_speciation(community, speciation_rate)
+      i <- i + 1  # Increment burn-in counter
+    } else {
+      # Run normal sim      
+      if (j %% interval_oct == 0) {
+        abundance_list[[j / interval_oct]] <- octaves(species_abundance(community))
+      }
+      community <- neutral_generation_speciation(community, speciation_rate)
+      j <- j + 1  # Increment
+      
+    }
+  }
+
+  # Record total time taken
+  total_time <- proc.time()[3] - start_time
+
+  # Save Output to File
+  save(time_series, octave_list, community, total_time, 
+       speciation_rate, size, wall_time, interval_rich, interval_oct, burn_in_generations, 
+       file = output_file_name)
+
+  return("Simulation Complete")  # Return a confirmation message
+}
+
+neutral_cluster_run(speciation_rate=0.1, size=100, wall_time=1, interval_rich=1, interval_oct=10, burn_in_generations=200, output_file_name="my_test_file_2.rda")
+
+obj_names <- load("my_test_file_2.rda")
+obj_names
+load("my_test_file_2.rda")
+time_series
+octave_list[[1]]
+length(octave_list)
+octave_list[[3000]]
+str(octave_list)
