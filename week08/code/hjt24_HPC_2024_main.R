@@ -561,58 +561,259 @@ neutral_cluster_run <- function(speciation_rate, size, wall_time, interval_rich,
 
 # Question 26 
 process_neutral_cluster_results <- function() {
+
+  # fn to calculate the mean octave of one run
+  mean_octave_from_file <- function(filenumber){ # enter file number 1-100
+      octaves_sum <- 0
+      load(paste0("../results/neutral_output/result_", filenumber, ".rda")) # file loaded
+      for(i in 1:length(abundance_list)) {
+        octaves_sum <- sum_vect(abundance_list[[i]], octaves_sum)
+      }
+      octave_mean <- octaves_sum / length(abundance_list)
+      return(octave_mean) 
+  }
   
+  # fn to calculate the mean octave from each community size
+  mean_octave_from_filelist <- function(filelist){ # enter vector of file numbers to average
+      octaves_sum <- 0
+      for(i in filelist) {
+        current_octave <- mean_octave_from_file(i)
+        octaves_sum <- sum_vect(current_octave, octaves_sum) # sum the means
+      }
+      octave_mean <- octaves_sum / length(filelist) # mean of means
+      return(octave_mean)
+  }
   
-  combined_results <- list() #create your list output here to return
-  # save results to an .rda file
-  
+  # Compute mean octaves for each initial community size group
+  combined_results <- list(
+        "size_500"  = mean_octave_from_filelist(1:25),
+        "size_1000" = mean_octave_from_filelist(26:50),
+        "size_2500" = mean_octave_from_filelist(51:75),
+        "size_5000" = mean_octave_from_filelist(76:100)
+  )
+
+  # Save to an .rda file
+  save(combined_results, file = "../results/processed_neutral_results.rda")
 }
 
 plot_neutral_cluster_results <- function(){
 
-    # load combined_results from your rda file
-  
-    png(filename="plot_neutral_cluster_results", width = 600, height = 400)
-    # plot your graph here
+    # load combined_results from rda file
+    load("../results/processed_neutral_results.rda")
+
+    ## graph
+    png(filename="../results/plot_neutral_cluster_results", width = 600, height = 400)
+    
+    # colours
+    cols <- c("red", "blue", "green", "purple")
+    community_sizes <- c(500,1000,2500,5000)
+
+    par(mfrow = c(2, 2), mgp = c(1.7, 0.5, 0))  # Reset multi-panel layout for PNG
+    for (i in seq_along(combined_results)) {
+        barplot(combined_results[[i]], 
+                main = paste("Mean Abundance Octave\n for Community Size of", community_sizes[i]),
+                xlab = "Octave Bin",
+                ylab = "Mean Species Count",
+                col = cols[i],
+                names.arg = seq_along(combined_results[[i]]),
+                cex.names = 0.85)
+    }
+
     Sys.sleep(0.1)
     dev.off()
     
-    return(combined_results)
+    return("All done!")
 }
-
 
 # Challenge questions - these are substantially harder and worth fewer marks.
 # I suggest you only attempt these if you've done all the main questions. 
 
 # Challenge question A
-Challenge_A <- function(){
+library(future.apply)
+
+Challenge_A <- function() {
   
-  png(filename="Challenge_A", width = 600, height = 400)
+  # Preallocate dataframe
+  total_rows <- 121 * 150 * 100
+  population_size_df <- data.frame(
+    simulation_number = integer(total_rows),
+    initial_condition = character(total_rows),
+    time_step = integer(total_rows),
+    population_size = numeric(total_rows),
+    stringsAsFactors = TRUE
+  )
+  
+  row_index <- 0  # Track the current row position
+
+  # Enable parallel processing
+  plan(multisession, workers = parallel::detectCores() - 1)  # Use available cores
+
+  # Parallel processing over files
+  results_list <- future_lapply(1:100, function(i) {
+    load(paste0("../results/demographic_output/output_", i, ".rda"))  # Load file
+    
+    # Process each simulation
+    simulation_data <- lapply(seq_along(results), function(j) {
+
+      # Get initial condition label
+      initial_condition <- if (i <= 25) {
+        "large pop adults"
+      } else if (i <= 50){  
+        "small pop adults"
+      } else if (i <= 75){  
+        "large pop spread"
+      } else {
+        "small pop spread"
+      }
+      
+      # Create a dataframe for this simulation
+      data.frame(
+        simulation_number = (i - 1) * 150 + j,  # unique simulation ID
+        initial_condition = initial_condition,
+        time_step = seq_along(results[[j]]),
+        population_size = results[[j]]
+      )
+    })
+    
+    do.call(rbind, simulation_data)  # Combine all simulations from this file
+  })
+
+  # Combine all results into one dataframe
+  population_size_df <- do.call(rbind, results_list)
+
+    # graph
+  png(filename="../results/Challenge_A", width = 600, height = 400)
   # plot your graph here
+  library(ggplot2)
+  print(ggplot(data = population_size_df, aes(x = time_step, y = population_size, 
+      group = simulation_number, colour = initial_condition)) +
+      geom_line(alpha = 0.05)+
+      guides(colour = guide_legend(override.aes = list(alpha = 1))))
+
   Sys.sleep(0.1)
   dev.off()
-  
+
+  # Save or return dataframe
+  return(population_size_df)
 }
 
-# Challenge question B
+# Challenge question B- note this may take 30 seconds
 Challenge_B <- function() {
-  
-  png(filename="Challenge_B", width = 600, height = 400)
-  # plot your graph here
+
+  row_number = 1000 # 1000 runs of the simulation
+  num_cores <- detectCores() - 1  # Use all but one core
+
+  # Run simulations in parallel, storing directly in a matrix
+  max_richness_mat <- do.call(cbind, mclapply(1:row_number, function(i) {
+    neutral_time_series_speciation(init_community_max(100), speciation_rate = 0.1, duration = 100)
+  }, mc.cores = num_cores))
+
+  min_richness_mat <- do.call(cbind, mclapply(1:row_number, function(i) {
+    neutral_time_series_speciation(init_community_min(100), speciation_rate = 0.1, duration = 100)
+  }, mc.cores = num_cores))
+
+  # Compute means & confidence intervals using matrix functions
+  mean_max_richness <- rowMeans(max_richness_mat, na.rm = TRUE)
+  mean_min_richness <- rowMeans(min_richness_mat, na.rm = TRUE)
+
+  sd_max_richness <- rowSds(max_richness_mat, na.rm = TRUE)
+  sd_min_richness <- rowSds(min_richness_mat, na.rm = TRUE)
+
+  t_critical <- qt(1 - (1 - 0.972) / 2, df = row_number - 1)
+
+  ci_max <- t_critical * (sd_max_richness / sqrt(row_number))
+  ci_min <- t_critical * (sd_min_richness / sqrt(row_number))
+
+  # Construct a long-format data frame efficiently
+  mean_richness_df <- data.frame(
+    Generation = rep(0:100, 2),
+    Mean_Richness = c(mean_max_richness, mean_min_richness),
+    CI_Lower = c(mean_max_richness - ci_max, mean_min_richness - ci_min),
+    CI_Upper = c(mean_max_richness + ci_max, mean_min_richness + ci_min),
+    Condition = rep(c("Max", "Min"), each = 101)
+  )
+
+  # plot
+  p <- ggplot(mean_richness_df, aes(x = Generation, y = Mean_Richness, color = Condition, fill = Condition)) +
+    geom_ribbon(aes(ymin = CI_Lower, ymax = CI_Upper), alpha = 0.2, color = NA) +  # Confidence intervals
+    geom_line(size = 0.4) +  # Mean richness lines
+    labs(title = "Mean Species Richness Over Time",
+         x = "Generation",
+         y = "Mean Species Richness") +
+    scale_color_manual(values = c("Max" = "blue", "Min" = "red")) +
+    scale_fill_manual(values = c("Max" = "blue", "Min" = "red")) +
+    theme_bw()  
+
+  # Save the plot
+  png(filename="../results/Challenge_B", width = 600, height = 400)
+  print(p)
+
   Sys.sleep(0.1)
   dev.off()
-  
+
+  return("I estimate that 40 generations are needed before the system reaches dynamic equilibrium, as this is the point at which the two initial conditions have overlapping confidence intervals of richness.")  # Return ggplot object for display
 }
 
 # Challenge question C
-Challenge_B <- function() {
+
+Challenge_C <- function() {
+  library(ggplot2)
+
+  # Initialise parameters
+  speciation_rate <- 0.1  # Set speciation rate
+  duration <- 100  # Number of generations to simulate
+  #richness_levels <- seq(10, 100, by=10)  # Different initial richness values
+  richness_levels <- c(10, 20, 40, 80, 160, 320)
+  runs_per_richness <- 100
+  size <- 100 # size of each community
+
+  # fn to initialise community st each indiv could be any species identity
+  init_community <- function(size, richness) {
+    community <- sample(1:richness, size, replace = TRUE)  # Assign each individual a species at random
+  return(community)
+  }
+
+  # Store results in a data frame
+  all_results <- data.frame()
+
+  for (richness in richness_levels) {
+    richness_sum <- numeric(duration + 1)  # Initialize as a numeric vector
+
+    for (i in 1:runs_per_richness) {
+      time_series <- neutral_time_series_speciation(init_community(size, richness), speciation_rate, duration)
+      richness_sum <- sum_vect(richness_sum, time_series)  # Sum time series
+    }
+
+    mean_richness <- richness_sum / runs_per_richness  # Compute mean
+
+    # Convert to long format
+    temp_df <- data.frame(
+      Generation = 0:duration,
+      Mean_Richness = mean_richness,
+      Initial_Richness = as.factor(richness)  # Convert to factor for ggplot
+    )
+    
+    all_results <- rbind(all_results, temp_df)
+  }
+
+  # Plot using ggplot2
+  p <- ggplot(all_results, aes(x = Generation, y = Mean_Richness, color = Initial_Richness)) +
+    geom_line(size = 1) +
+    labs(title = "Species Richness Over Time for Different Initial Richness Levels",
+         x = "Generation",
+         y = "Mean Species Richness") +
+    scale_color_viridis_d() +  # Better color scheme for clarity
+    theme_bw()+
+    theme(legend.position = "none")
   
-  png(filename="Challenge_C", width = 600, height = 400)
-  # plot your graph here
+  png(filename="../results/Challenge_C", width = 600, height = 400)
+  print(p)
   Sys.sleep(0.1)
   dev.off()
 
+  return("Done")
 }
+
 
 # Challenge question D
 Challenge_D <- function() {
