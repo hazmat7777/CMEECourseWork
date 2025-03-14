@@ -30,7 +30,7 @@ Fits a series of models to bacterial growth curves.
 `bash run_scripts.sh`
 
 - **Figure_2.R**: Source after run_scripts.sh to produce a composite figure comparing six time series and their fitted models.
-`source Figure_2.R`
+`source("Figure_2.R")`
 
 #### Data
 - **LogisticGrowthData.csv**: Bacterial time series data from 10 studies.
@@ -41,6 +41,27 @@ Fits a series of models to bacterial growth curves.
 
 #### Results
 To store files outputted from the code directory.
+
+- **AICc_allmodels.csv**: AICc score of each model on each time series.
+
+- **AICc_winners_by_ID_final.csv**: Dataframe containing the model with the lowest AICc for each time series.
+
+- **AICc_winners_by_ID.csv**: Summary of model performance.
+
+- **sensitivity.csv**: Summary of model sensitivity to initial parameters.
+
+- **fitted_df_final.csv**: Fitted values of each model on each time series, for plotting.
+
+- **AICc_allmodels.csv**: AICc score of each model on each time series.
+
+- **plots/**: AICc score of each model on each time series.
+
+
+write.csv(model_winners_by_ID, "../results/AICc_winners_by_ID_final.csv")
+write.csv(model_count_summary, "../results/AICc_winners_final.csv")
+write.csv(fitted_df_passed, "../results/fitted_df_final.csv")
+write.csv(sensitivity_summary, "../results/sensitivity.csv")
+
 
 ### Author name and contact
 Harry Trevelyan  

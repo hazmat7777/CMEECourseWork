@@ -32,7 +32,7 @@ for (s in unique(fitted_df$ID_num)) {
     ggtitle(paste("ID_num:", s))  # Add a title with the ID_num
   
   # Save the plot with a unique filename
-  plot_filename <- paste("../results/plot_ID_", s, ".png", sep = "")
+  plot_filename <- paste("../results/plots/plot_ID_", s, ".png", sep = "")
   ggsave(plot_filename, plot = p)  # Save the plot to the specified filename
 }
 
