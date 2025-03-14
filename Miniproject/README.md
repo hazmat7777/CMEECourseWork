@@ -25,10 +25,10 @@ Fits a series of models to bacterial growth curves.
 - **visualisation.R**: Plots growth data against fitted models.
 
 - **run_scripts.sh**: Runs the previous three scripts.
-`bash run_scripts.sh`
+    - `bash run_scripts.sh`
 
 - **Figure_2.R**: Source after run_scripts.sh to produce a composite figure comparing six time series and their fitted models.
-`source("Figure_2.R")`
+    - `source("Figure_2.R")`
 
 - **Miniproject.tex**: Source code for writeup. Will fail when run, as was compiled in overleaf environment. 
 
@@ -56,13 +56,6 @@ To store files outputted from the code directory.
 - **AICc_allmodels.csv**: AICc score of each model on each time series.
 
 - **plots/**: AICc score of each model on each time series.
-
-
-write.csv(model_winners_by_ID, "../results/AICc_winners_by_ID_final.csv")
-write.csv(model_count_summary, "../results/AICc_winners_final.csv")
-write.csv(fitted_df_passed, "../results/fitted_df_final.csv")
-write.csv(sensitivity_summary, "../results/sensitivity.csv")
-
 
 ### Author name and contact
 Harry Trevelyan  
