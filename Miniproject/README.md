@@ -20,8 +20,6 @@ Fits a series of models to bacterial growth curves.
 #### Code
 - **DataWrang.R**: Loads and prepares bacterial growth data for analysis.
 
-- **Miniproject.tex**: Source code for writeup. Will fail when run, as was compiled in overleaf environment. 
-
 - **model_fitting.R**: Fits models to data.
 
 - **visualisation.R**: Plots growth data against fitted models.
@@ -31,6 +29,9 @@ Fits a series of models to bacterial growth curves.
 
 - **Figure_2.R**: Source after run_scripts.sh to produce a composite figure comparing six time series and their fitted models.
 `source("Figure_2.R")`
+
+- **Miniproject.tex**: Source code for writeup. Will fail when run, as was compiled in overleaf environment. 
+
 
 #### Data
 - **LogisticGrowthData.csv**: Bacterial time series data from 10 studies.
