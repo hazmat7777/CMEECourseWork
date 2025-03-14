@@ -8,13 +8,13 @@ Fits a series of models to bacterial growth curves.
 - R
 
 ### Dependencies and Installation
-`install.packages("dplyr")`
-`install.packages("minpack.lm")`
-`install.packages("AICcmodavg")`
-`install.packages("parallel")`
-`install.packages("ggplot2")`
-`install.packages("gridExtra")`
-`install.packages("grid")`
+- `install.packages("dplyr")`
+- `install.packages("minpack.lm")`
+- `install.packages("AICcmodavg")`
+- `install.packages("parallel")`
+- `install.packages("ggplot2")`
+- `install.packages("gridExtra")`
+- `install.packages("grid")`
 
 ### Project structure and Usage
 #### Code
