@@ -55,7 +55,7 @@ To store files outputted from the code directory.
 
 - **AICc_allmodels.csv**: AICc score of each model on each time series.
 
-- **plots/**: AICc score of each model on each time series.
+- **plot_ID_n**: Visualisations of data and fitted values. Note many ID numbers are missing as they were removed during the data wrangling stage.
 
 ### Author name and contact
 Harry Trevelyan  
