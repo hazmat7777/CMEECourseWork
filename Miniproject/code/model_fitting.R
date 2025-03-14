@@ -336,15 +336,11 @@ results <- mclapply(unique(data$ID_num), fit_models_for_id, data = data, mc.core
 AICc_df <- do.call(rbind, lapply(results, function(x) do.call(rbind, x$aic_temp_list)))
 fitted_df <- do.call(rbind, lapply(results, function(x) do.call(rbind, x$fit_temp_list)))
 
-length(unique(AICc_df$ID_num)) # 179
-
 # Find the datasets for which all models fit successfully
 AICc_df_passed <- AICc_df  %>% 
     group_by(ID_num)  %>% 
     filter(n() == 6)  %>% 
     ungroup()
-
-length(unique(AICc_df_passed$ID_num)) # 154 (so 25 IDs failed at least one model)
 
 # Subset fitted values df to include only those where all models fit successfully
 fitted_df_passed <- fitted_df %>% 
@@ -367,15 +363,12 @@ model_count_summary <- AICc_df_passed %>%
   arrange(desc(count)) %>%   # Arrange in descending order of count
   mutate(Percentage_success = round(count*100/154, 1))
 
-model_count_summary
-
 # Summarise the sensitivity to parameters
 sensitivity_summary <- AICc_df_passed %>%
   group_by(model) %>%  # Group by model
   summarise(AICc_sd = mean(AICc_sd)) %>%  # find the mean standard deviation
   arrange(desc(AICc_sd)) 
 
-sensitivity_summary
 # Idea of overall model fit
 sum(AICc_df$AICc) # 20794 total AICc is the lowest I've recorded
 
@@ -384,5 +377,5 @@ write.csv(AICc_df, "../results/AICc_allmodels.csv")
 write.csv(model_winners_by_ID, "../results/AICc_winners_by_ID_final.csv")
 write.csv(model_count_summary, "../results/AICc_winners_final.csv")
 write.csv(fitted_df_passed, "../results/fitted_df_final.csv")
-
+write.csv(sensitivity_summary, "../results/sensitivity.csv")
 

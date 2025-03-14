@@ -9,7 +9,7 @@ meta <- read.csv("../data/LogisticGrowthMetaData.csv")
 print(meta)
 
 # Load data
-data <- read_csv("../data/LogisticGrowthData.csv")
+data <- read.csv("../data/LogisticGrowthData.csv")
 cat("Loaded", ncol(data), "columns.\n")
 
 print(colnames(data)) # Print column names
@@ -50,9 +50,6 @@ data <- data %>%
   group_by(ID_num) %>%
   filter(n() >= 10) %>%
   ungroup()
-
-
-length(unique(data$ID_num))
 
 # inspect and remove poor data (i.e. data w excessive noise or evident systematic errors in data collection)
 for (s in unique(data$ID_num)) {
