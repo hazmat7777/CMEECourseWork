@@ -51,24 +51,25 @@ data <- data %>%
   filter(n() >= 10) %>%
   ungroup()
 
-# inspect and remove poor data (i.e. data w excessive noise or evident systematic errors in data collection)
-for (s in unique(data$ID_num)) {
-  # Subset the data for the current ID_num
-  data_subset <- data %>%
-    filter(ID_num == s)
+## inspect and remove poor data (i.e. data w excessive noise or evident systematic errors in data collection)
+## I have commented this out in case you don't want to store all these plots!
+# for (s in unique(data$ID_num)) {
+#   # Subset the data for the current ID_num
+#   data_subset <- data %>%
+#     filter(ID_num == s)
 
-  # Create the plot
-  p <- ggplot(data_subset, aes(x = Time, y = PopBio)) +
-    geom_point(size = 3) +
-    theme_bw() +  # make the background white
-    theme(aspect.ratio = 1) +  # make the plot square
-    labs(x = "Time", y = "log(Abundance)") +
-    ggtitle(paste("ID_num:", s))  # Add a title with the ID_num
+#   # Create the plot
+#   p <- ggplot(data_subset, aes(x = Time, y = PopBio)) +
+#     geom_point(size = 3) +
+#     theme_bw() +  # make the background white
+#     theme(aspect.ratio = 1) +  # make the plot square
+#     labs(x = "Time", y = "log(Abundance)") +
+#     ggtitle(paste("ID_num:", s))  # Add a title with the ID_num
   
-  # Save the plot with a unique filename
-  plot_filename <- paste("../sandbox/growthcurves/plot_ID_", s, ".png", sep = "")
-  ggsave(plot_filename, plot = p)  # Save the plot to the specified filename
-}
+#   # Save the plot with a unique filename
+#   plot_filename <- paste("../sandbox/growthcurves/plot_ID_", s, ".png", sep = "")
+#   ggsave(plot_filename, plot = p)  # Save the plot to the specified filename
+# }
 
 data <- data %>%
   filter(!ID_num %in% c(59, 64, 71, 72, 77, 82, 87, 107, 111, 134, 286, 289)) # based on inspection of plots
