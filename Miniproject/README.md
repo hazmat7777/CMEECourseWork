@@ -37,6 +37,8 @@ Fits a series of models to bacterial growth curves.
 
 - **LogisticGrowthMetaData.csv**: Metadata for the above.
 
+- **cleaned_data_final.csv**: Cleaned time series data (output of DataWrang.R)
+
 #### Results
 To store files outputted from the code directory.
 
