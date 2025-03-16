@@ -2088,3 +2088,130 @@ Challenge_E <- function(size, speciation_rate) {
   
   return("type your written answer here")
 }
+
+
+
+
+# Question 22
+question_22 <- function() {
+
+  # run 200 generations to 'burn in'
+  community_max <- Reduce(function(comm, .) neutral_generation_speciation(comm, speciation_rate = 0.1),
+                        x = seq_len(200),
+                        init = init_community_max(100))
+  community_min <- Reduce(function(comm, .) neutral_generation_speciation(comm, speciation_rate = 0.1),
+                        x = seq_len(200),
+                        init = init_community_min(100))
+
+  # keep track of octaves
+  max_octaves_sum <- octaves(species_abundance(community_max))
+  min_octaves_sum <- octaves(species_abundance(community_min))
+
+  # run simulation, calculating and summing the octaves every 20 generations
+  for(i in 1:2000){
+    community_max <- neutral_generation_speciation(community_max, speciation_rate = 0.1)
+    community_min <- neutral_generation_speciation(community_min, speciation_rate = 0.1)
+    
+    if(i %% 20 == 0){
+      max_octaves_sum <- sum_vect(max_octaves_sum, octaves(species_abundance(community_max)))
+      min_octaves_sum <- sum_vect(min_octaves_sum, octaves(species_abundance(community_min)))
+
+    }
+  }
+
+  max_octaves_mean <- max_octaves_sum/100
+  min_octaves_mean <- min_octaves_sum/100
+
+  # graph
+  png(filename="../results/question_22", width = 600, height = 400)
+  
+  par(mfrow = c(1,2), oma = c(0, 0, 3, 0))  # Increase top margin for mtext()
+  
+  # Bar plot for Max Initial Richness
+  barplot(max_octaves_mean, col = "blue", names.arg = c(1,2,3,4,5,6), 
+          main = "High Initial Richness",
+          xlab = "Octave Class", ylab = "Number of Species",
+          ylim = c(0,12))
+
+  # Bar plot for Min Initial Richness
+  barplot(min_octaves_mean, col = "red", names.arg = c(1,2,3,4,5,6),
+          main = "Low Initial Richness", 
+          xlab = "Octave Class", ylab = "Number of Species",
+          ylim = c(0,12))
+
+  mtext("Mean Species Abundance Distribution", outer = TRUE)
+
+  Sys.sleep(0.1)
+  dev.off()
+  
+return("The plots indicate that in our simulations, initial species richness does not influence the emergent species abundance distribution. After the 200-generation burn-in period, the system stabilizes. This stable state is characterized by many species with low abundance, likely due to high speciation.")
+}
+
+Challenge_E_helper <- function(size, speciation_rate) {
+  
+  J <- size
+  v <- speciation_rate
+
+  # Initialize
+  lineages <- rep(1, times = J)  # Each lineage starts with 1 individual
+  abundances <- numeric()        # Store final sizes of each lineage
+  N <- J                         # Track the number of lineages
+
+  # Calculate theta
+  theta <- v * (J - 1) / (1 - v)
+
+  # Store history for plotting
+  history <- matrix(NA, nrow = J, ncol = J)
+  history[,1] <- lineages
+
+  generation <- 1
+
+  while(N > 1) {
+    ji <- sample(1:N, 2, replace = FALSE)
+    j <- ji[1]
+    i <- ji[2]
+
+    randnum <- runif(1, min = 0, max = 1)
+    
+    if (randnum < theta / (theta + N - 1)) {
+      abundances <- c(abundances, lineages[j])
+    } else {
+      lineages[i] <- lineages[i] + lineages[j]
+    }
+
+    # Remove the merged lineage
+    lineages <- lineages[-j]
+    N <- N - 1
+    
+    # Update history
+    history[1:N, generation + 1] <- lineages
+    history[, generation + 1][is.na(history[, generation + 1])] <- 0
+
+    generation <- generation + 1
+  }
+  
+  return(abundances)
+}
+
+
+
+Challenge_E <- function(){
+  abund<- Challenge_E_helper(100,0.1, 200)
+
+  octave_counts <- octaves(abund)
+  png(filename="../results/Challenge_E", width = 600, height = 400)
+
+
+  barplot(octave_counts, col = "red", names.arg = seq_len(length(octave_counts)),
+        main = "Initial size: 100",
+        xlab = "Octave Class", ylab = "Number of Species")
+  
+  Sys.sleep(0.1)
+  dev.off()
+  
+  return("The coalescence model is computationally less intensive than forward-time simulations: the former ignores the details of populations dynamics, while the latter involves state changes needing to be simulated at each step.")
+
+}
+
+
+Challenge_E()

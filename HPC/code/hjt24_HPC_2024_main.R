@@ -682,7 +682,7 @@ Challenge_A <- function() {
   population_size_df <- do.call(rbind, results_list)
 
     # graph
-  png(filename="../results/Challenge_A", width = 600, height = 400)
+  png(filename="../results/Challenge_A.png", width = 600, height = 400)
   # plot your graph here
   library(ggplot2)
   print(ggplot(data = population_size_df, aes(x = time_step, y = population_size, 
@@ -745,7 +745,7 @@ Challenge_B <- function() {
     theme_bw()  
 
   # Save the plot
-  png(filename="../results/Challenge_B", width = 600, height = 400)
+  png(filename="../results/Challenge_B.png", width = 600, height = 400)
   print(p)
 
   Sys.sleep(0.1)
@@ -806,7 +806,7 @@ Challenge_C <- function() {
     theme_bw()+
     theme(legend.position = "none")
   
-  png(filename="../results/Challenge_C", width = 600, height = 400)
+  png(filename="../results/Challenge_C.png", width = 600, height = 400)
   print(p)
   Sys.sleep(0.1)
   dev.off()
@@ -814,8 +814,6 @@ Challenge_C <- function() {
   return("Done")
 }
 
-
-# Challenge question D
 # Challenge question D
 Challenge_D <- function() {
 
@@ -849,7 +847,7 @@ Challenge_D <- function() {
   # x axis
   generations<- seq_len(target_length)
 
-  png(filename="Challenge_D", width = 800, height = 600)
+  png(filename="Challenge_D.png", width = 800, height = 600)
   
   # Plot the first time series
   plot(generations, mts_500, type = "l", col = "blue", lwd = 2, ylim = c(0, max(mts_5000)), 
@@ -869,31 +867,70 @@ Challenge_D <- function() {
 }
 
 # Challenge question E
-Challenge_E <- function(size, speciation_rate) {
-  
-  j <- size
+Challenge_E_helper <- function(size, speciation_rate, burn_in_generations = 200) {
+  J <- size
   v <- speciation_rate
 
-  # initialise 
-  lineages <- rep(1,times = j)# a
-  abundances <- numeric() # b
-  N <- j
+  # Initialize
+  lineages <- rep(1, times = J)  # Each lineage starts with 1 individual
+  abundances <- numeric()        # Store final sizes of each lineage
+  N <- J                         # Track the number of lineages
 
-  # calculate theta
-  theta <- v(j-1)/(1-v)
+  # Calculate theta
+  theta <- v * (J - 1) / (1 - v)
 
-  # e) choose an index j for lineages accoding to unif
+  # Perform burn-in generations
+  for(gen in 1:burn_in_generations) {
+    if (N > 1) {
+      ji <- sample(1:N, 2, replace = FALSE)
+      j <- ji[1]
+      i <- ji[2]
+
+      randnum <- runif(1, min = 0, max = 1)
+      
+      if (randnum < theta / (theta + N - 1)) {
+        abundances <- c(abundances, lineages[j])
+      } else {
+        lineages[i] <- lineages[i] + lineages[j]
+      }
+
+      # Remove the merged lineage
+      lineages <- lineages[-j]
+      N <- N - 1
+    }
+  }
+
+  # Reset history tracking after burn-in
+  history <- matrix(NA, nrow = J, ncol = J)
+  history[,1] <- lineages
+  generation <- 1
+
+  while(N > 1) {
+    ji <- sample(1:N, 2, replace = FALSE)
+    j <- ji[1]
+    i <- ji[2]
+
+    randnum <- runif(1, min = 0, max = 1)
+    
+    if (randnum < theta / (theta + N - 1)) {
+      abundances <- c(abundances, lineages[j])
+    } else {
+      lineages[i] <- lineages[i] + lineages[j]
+    }
+
+    # Remove the merged lineage
+    lineages <- lineages[-j]
+    N <- N - 1
+    
+    # Update history
+    if (generation <= J) {
+      history[1:N, generation + 1] <- lineages
+      history[, generation + 1][is.na(history[, generation + 1])] <- 0
+    }
+
+    generation <- generation + 1
+  }
   
-
-
-  #b 
-
-
-  png(filename="Challenge_E", width = 600, height = 400)
-  # plot your graph here
-  Sys.sleep(0.1)
-  dev.off()
-  
-  return("type your written answer here")
+  return(abundances)
 }
 

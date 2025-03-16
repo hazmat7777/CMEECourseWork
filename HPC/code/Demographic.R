@@ -122,3 +122,69 @@ sum_vect <- function(x, y) {
     return(result)
 }
 
+Challenge_E_helper <- function(size, speciation_rate, burn_in_generations = 200) {
+  J <- size
+  v <- speciation_rate
+
+  # Initialize
+  lineages <- rep(1, times = J)  # Each lineage starts with 1 individual
+  abundances <- numeric()        # Store final sizes of each lineage
+  N <- J                         # Track the number of lineages
+
+  # Calculate theta
+  theta <- v * (J - 1) / (1 - v)
+
+  # Perform burn-in generations
+  for(gen in 1:burn_in_generations) {
+    if (N > 1) {
+      ji <- sample(1:N, 2, replace = FALSE)
+      j <- ji[1]
+      i <- ji[2]
+
+      randnum <- runif(1, min = 0, max = 1)
+      
+      if (randnum < theta / (theta + N - 1)) {
+        abundances <- c(abundances, lineages[j])
+      } else {
+        lineages[i] <- lineages[i] + lineages[j]
+      }
+
+      # Remove the merged lineage
+      lineages <- lineages[-j]
+      N <- N - 1
+    }
+  }
+
+  # Reset history tracking after burn-in
+  history <- matrix(NA, nrow = J, ncol = J)
+  history[,1] <- lineages
+  generation <- 1
+
+  while(N > 1) {
+    ji <- sample(1:N, 2, replace = FALSE)
+    j <- ji[1]
+    i <- ji[2]
+
+    randnum <- runif(1, min = 0, max = 1)
+    
+    if (randnum < theta / (theta + N - 1)) {
+      abundances <- c(abundances, lineages[j])
+    } else {
+      lineages[i] <- lineages[i] + lineages[j]
+    }
+
+    # Remove the merged lineage
+    lineages <- lineages[-j]
+    N <- N - 1
+    
+    # Update history
+    if (generation <= J) {
+      history[1:N, generation + 1] <- lineages
+      history[, generation + 1][is.na(history[, generation + 1])] <- 0
+    }
+
+    generation <- generation + 1
+  }
+  
+  return(abundances)
+}
