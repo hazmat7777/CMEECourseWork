@@ -4,6 +4,7 @@
 **/sandbox/
 **/results/*
 !**/results/.gitkeep
+!HPC/results/*
 *.exe
 *.o
 *.class
