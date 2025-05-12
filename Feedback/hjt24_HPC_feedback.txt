@@ -1,0 +1,83 @@
+HPC long practical feedback for Harry ( Harry Trevelyan ) 2025
+ 
+email : hjt24@imperial.ac.uk
+username : hjt24
+ 
+Your final mark is : 91.31 %
+ 
+Mark allocation break down
+1) Technically correct answers to all questions worth 60 % of final grade
+Your mark :  59.7 /60
+2) Quality of free text answers worth 8 % of final grade
+Your mark :  6 /8
+3) Quality of graphical outputs worth 8 % of final grade
+Your mark :  9 /10
+4) Quality of code worth 8 % of final grade
+Your mark :  7 /8
+5) Answers to challenge questions worth 16 % of final grade
+Your mark :  9.5 /14
+ 
+Marks for main questions
+Q 0 :    3 / 3
+Q 1 :    4 / 4
+Q 2 :    3 / 3
+Q 3 :    10 / 10
+Q 4 :    10 / 10
+Q 5 :    8 / 8
+Q 6 :    10 / 10
+Q 7 :    2 / 2
+Q 8 :    1 / 1
+Q 9 :    1 / 1
+Q 10 :    2 / 2
+Q 11 :    2 / 2
+Q 12 :    2 / 2
+Q 13 :    2 / 2
+Q 14 :    3 / 3
+Q 15 :    3 / 3
+Q 16 :    1 / 1
+Q 17 :    1 / 1
+Q 18 :    4 / 4
+Q 19 :    3 / 3
+Q 20 :    3 / 3
+Q 21 :    2 / 2
+Q 22 :    3.5 / 4    comments: nearly there but needed a bit more answer to why the system stabilises, again mentioning dynamic equilibrium would be ideal.
+Q 23 :    6 / 6
+Q 24 :    6 / 6
+Q 25 :    10 / 10
+Q 26 :    10 / 10
+          ---------
+Total     115.5 / 116
+          ---------
+ 
+Marks for text quality :  6 /8
+Comments...
+In question 1 very good, well written and shows deep understanding but perhaps a little more long-winded than it needs to be.
+In question 2 excellent
+In question 5 excellent
+In question 6 excellent
+In question 14 very good but would have been nice if it had explained a little more about the stochastic loss
+In question 18 excellent, would have been nice to mention dynamic equilibrium explicitly
+In question 22 very good but could have gone deeper into the 'why' part
+ 
+Marks for graphics quality :  9 /10
+Comments...
+In question 1 excellent, but if I'm being picky I'd say the box around the legend doesn't look nice.
+In question 2 nearly perfect but y axis cuts off a little at the top
+In question 5 exemplary
+In question 6 exemplary
+In question 14 would be nice if the png output had higher resolution
+In question 18 exemplary though a higher resolution would have been nice
+In question 22 very good but to be perfect I'd expect labelling of the octaves more fully e.g. 1, 2-3, 4-7 and so on, not just 1,2,3,..
+In question 26 ideally would have full labels for abundance instead of just octave numbers
+ 
+Marks for code quality :  7 /8
+Comments...
+very good but not perfect, e.g. it's a mistake not to specify filename extensions on outputted PNG files
+ 
+Marks for challenge questions :  9.5 /14
+Comments...
+challenge question A, does what was asked but the graph would have been nicer without the grey background and the code needed a bit of coaxing to work beacuse of the multi-threading - a clever thing to do but did make the code less portable
+challenge question B, very good but needed fiddling around to work - also could have gone a bit further with the question, no clear error bars on the graph and no attempt to detect and mark the equilibrium
+challenge question C, excellent
+challenge question D, excellent, though the legend placement obscures the data
+challenge question E, a start but incomplete - the graph does not match that from the (correct) cluster simulations and there is not actually a function for challenge_E defined, just a helper function so perhaps this one is unfinished.
